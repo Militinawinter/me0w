@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>me0w</title>
+<meta name="description" content="Chat, play games and scroll short videos in one place.">
+<link rel="icon" href="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050505; --surface:#0d0d0d; --card:rgba(255,255,255,.03); --line:rgba(255,255,255,.09);
+  --text:#fafafa; --muted:#8b8b93; --hover:rgba(255,255,255,.06);
+  --logo-filter:brightness(0) invert(1); --head:rgba(5,5,5,.7); --spot:rgba(255,255,255,.07);
+  --ease:cubic-bezier(.22,.8,.24,1);
+}
+:root[data-theme="light"]{
+  --bg:#fafafa; --surface:#fff; --card:rgba(0,0,0,.025); --line:rgba(0,0,0,.09);
+  --text:#0a0a0a; --muted:#6b6b73; --hover:rgba(0,0,0,.05);
+  --logo-filter:brightness(0); --head:rgba(250,250,250,.75); --spot:rgba(0,0,0,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+body{font-family:'Inter','Prompt',system-ui,-apple-system,'Noto Sans SC','PingFang SC','Hiragino Sans','Noto Sans KR',sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;min-height:100vh;
+  transition:background .5s var(--ease),color .5s var(--ease);padding-bottom:env(safe-area-inset-bottom,0px);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;transition:background .5s;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,var(--spot),transparent 70%)}
+body.calm *{animation:none!important;transition-duration:.01ms!important}
+
+/* Header */
+header{position:fixed;inset:0 0 auto 0;z-index:50;padding-top:env(safe-area-inset-top,0px);
+  background:var(--head);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
+  border-bottom:1px solid var(--line);transition:background .5s var(--ease),border-color .5s;animation:drop .8s var(--ease) both}
+@keyframes drop{from{transform:translateY(-100%);opacity:0}}
+.bar{max-width:1080px;margin:0 auto;height:60px;padding:0 24px;display:flex;align-items:center;gap:16px}
+nav{display:flex;gap:2px}
+nav a{color:var(--muted);text-decoration:none;font-size:.88rem;font-weight:500;padding:8px 14px;border-radius:10px;transition:color .25s,background .25s}
+nav a:hover{color:var(--text);background:var(--hover)}
+.right{margin-left:auto;display:flex;align-items:center;gap:14px}
+.logo{height:28px;width:auto;display:block;filter:var(--logo-filter);transition:filter .4s,opacity .3s}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--text);
+  display:grid;place-items:center;cursor:pointer;transition:background .25s,border-color .25s}
+.icon-btn:hover,.icon-btn[aria-expanded="true"]{background:var(--hover);border-color:var(--muted)}
+.icon-btn svg{width:18px;height:18px;transition:transform .6s var(--ease)}
+.icon-btn[aria-expanded="true"] svg{transform:rotate(60deg)}
+
+/* Settings panel */
+.panel{position:fixed;top:calc(68px + env(safe-area-inset-top,0px));right:16px;width:min(340px,calc(100vw - 32px));z-index:60;
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:8px 20px 20px;
+  box-shadow:0 30px 70px -20px rgba(0,0,0,.5);opacity:0;transform:translateY(-8px) scale(.98);transform-origin:top right;
+  pointer-events:none;visibility:hidden;transition:opacity .3s var(--ease),transform .3s var(--ease),visibility .3s}
+.panel.open{opacity:1;transform:none;pointer-events:auto;visibility:visible}
+.label{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:18px 0 10px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.seg button{font:inherit;font-size:.88rem;font-weight:500;padding:9px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer;transition:.25s var(--ease)}
+.seg button.on{background:var(--text);color:var(--bg)}
+.langs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.langs button{font:inherit;font-size:.86rem;text-align:left;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;transition:.25s var(--ease)}
+.langs button:hover{background:var(--hover)}
+.langs button.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.9rem;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.sw{position:relative;width:44px;height:26px;border-radius:99px;background:var(--line);border:0;cursor:pointer;flex:none;transition:background .3s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--bg);transition:transform .35s var(--ease)}
+.sw.on{background:var(--text)}.sw.on::after{transform:translateX(18px)}
+
+/* Layout */
+main{max-width:1080px;margin:0 auto;padding:0 24px}
+.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:110px 0 70px}
+.hero-logo{height:clamp(80px,18vw,150px);width:auto;max-width:80%;filter:var(--logo-filter);transition:filter .4s;animation:rise 1.1s var(--ease) .1s both}
+.tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--line);border-radius:99px;font-size:.8rem;color:var(--muted);margin-bottom:36px;animation:rise 1s var(--ease) both}
+.tag i{width:6px;height:6px;border-radius:50%;background:var(--text);animation:blink 2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+h1{font-size:clamp(1.6rem,4.6vw,2.8rem);font-weight:600;letter-spacing:-.03em;line-height:1.15;margin-top:36px;animation:rise 1.1s var(--ease) .25s both}
+.sub{max-width:520px;color:var(--muted);margin:16px auto 34px;font-size:clamp(.95rem,2.2vw,1.05rem);animation:rise 1.1s var(--ease) .4s both}
+.cta{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:99px;background:var(--text);color:var(--bg);font-weight:600;font-size:.92rem;text-decoration:none;
+  transition:transform .35s var(--ease),opacity .25s;animation:rise 1.1s var(--ease) .55s both}
+.cta:hover{transform:translateY(-2px);opacity:.88}
+.cta svg{width:16px;height:16px;transition:transform .35s var(--ease)}
+.cta:hover svg{transform:translateY(2px)}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}}
+
+section{padding:80px 0}
+.head{margin-bottom:36px}
+.head h2{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:600;letter-spacing:-.03em}
+.head p{color:var(--muted);margin-top:6px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{padding:28px;border-radius:20px;background:var(--card);border:1px solid var(--line);transition:transform .4s var(--ease),border-color .3s,background .3s}
+.card:hover{transform:translateY(-4px);border-color:var(--muted);background:var(--hover)}
+.num{font-size:.78rem;color:var(--muted);font-weight:500;letter-spacing:.08em;margin-bottom:28px;display:block}
+.card h3{font-size:1.1rem;font-weight:600;margin-bottom:6px}
+.card p{color:var(--muted);font-size:.92rem}
+
+.contact{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--text);padding:22px 24px}
+.ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--text);color:var(--bg);flex:none;transition:transform .4s var(--ease)}
+.contact:hover .ic{transform:scale(1.07) rotate(-6deg)}
+.ic svg{width:22px;height:22px}
+.contact b{display:block;font-weight:600;font-size:1rem;line-height:1.3}
+.contact span{color:var(--muted);font-size:.9rem;word-break:break-all}
+.go{margin-left:auto;width:18px;height:18px;color:var(--muted);flex:none;transition:transform .35s var(--ease),color .25s}
+.contact:hover .go{transform:translate(3px,-3px);color:var(--text)}
+
+footer{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;max-width:1080px;margin:40px auto 0;padding:28px 24px calc(28px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+footer .logo{height:20px}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+body.calm .reveal{opacity:1;transform:none}
+.fade{transition:opacity .25s}.fade.out{opacity:0}
+
+#prog{position:fixed;top:0;left:0;height:2px;width:100%;background:var(--text);transform:scaleX(0);transform-origin:0 50%;z-index:70}
+.hero{position:relative}
+.hero::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(ellipse 55% 50% at 50% 45%,#000,transparent 75%);mask-image:radial-gradient(ellipse 55% 50% at 50% 45%,#000,transparent 75%)}
+.card{position:relative;overflow:hidden}
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),var(--spot),transparent 70%)}
+.card:hover::after{opacity:1}
+.bento{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.bento .num{position:absolute;top:26px;right:26px;margin:0}
+.fi{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;margin-bottom:24px;transition:background .3s,color .3s,transform .4s var(--ease)}
+.fi svg{width:20px;height:20px}
+.card:hover .fi{background:var(--text);color:var(--bg);transform:translateY(-2px)}
+@media(min-width:900px){.bento{grid-template-columns:repeat(4,1fr);grid-auto-flow:dense}.bento .card:nth-child(1),.bento .card:nth-child(7),.bento .card:nth-child(13){grid-column:span 2}}
+.marq{overflow:hidden;border-block:1px solid var(--line);padding:18px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.track{display:flex;width:max-content;animation:mq 45s linear infinite}
+.track span{font-size:.92rem;color:var(--muted);white-space:nowrap;display:flex;align-items:center}
+.track span::after{content:"";width:4px;height:4px;border-radius:50%;background:var(--muted);margin:0 28px}
+@keyframes mq{to{transform:translateX(-50%)}}
+.try{text-decoration:none;display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:99px;border:0;background:var(--text);color:var(--bg);font:inherit;font-size:.85rem;font-weight:600;cursor:pointer;position:relative;overflow:hidden;transition:transform .35s var(--ease)}
+.try:hover{transform:translateY(-1px)}.try:active{transform:scale(.96)}
+.try i{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:blink 1.6s infinite}
+.try::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(128,128,128,.4),transparent 70%);transform:translateX(-120%);animation:sh 3.5s ease-in-out infinite}
+@keyframes sh{60%,100%{transform:translateX(120%)}}
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+#chat{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;visibility:hidden;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--spot),var(--bg) 70%),var(--bg);
+  clip-path:circle(0px at var(--x,100%) var(--y,0));transition:clip-path .9s var(--ease),visibility 0s .9s}
+#chat.open{visibility:visible;clip-path:circle(150vmax at var(--x,100%) var(--y,0));transition:clip-path .9s var(--ease),visibility 0s}
+.win{position:relative;display:flex;flex-direction:column;width:min(560px,100%);height:min(720px,calc(100svh - 40px));background:var(--surface);border-radius:24px;
+  box-shadow:0 40px 100px -30px rgba(0,0,0,.6);opacity:0;transform:translateY(40px) scale(.95);transition:opacity .7s var(--ease) .3s,transform .8s var(--ease) .3s}
+#chat.open .win{opacity:1;transform:none}
+#chat:not(.open) .win{transition-delay:0s}
+.win::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;background:conic-gradient(from var(--a),var(--line) 0 65%,var(--text));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:spin 7s linear infinite}
+.wh{display:flex;align-items:center;gap:10px;padding:14px 16px 14px 20px;border-bottom:1px solid var(--line)}
+.wt{display:flex;align-items:center;gap:10px;flex:1;min-width:0}.wt b{font-weight:600}
+#dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none;transition:background .4s}
+#chat.live #dot{background:#22c55e;box-shadow:0 0 12px #22c55e;animation:blink 2s infinite}
+#st{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nm{width:104px;font:inherit;font-size:.82rem;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--text);outline:0;transition:border-color .25s}
+#nm:focus,#mi:focus{border-color:var(--muted)}
+#msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;overscroll-behavior:contain}
+#empty{margin:auto;color:var(--muted);font-size:.9rem;animation:blink 2.6s ease-in-out infinite}
+.m{display:flex;gap:10px;max-width:88%;animation:pop .6s var(--ease) both}
+.m.me{align-self:flex-end;flex-direction:row-reverse}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.95);filter:blur(5px)}}
+.av{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--hover);display:grid;place-items:center;font-size:.8rem;font-weight:600;flex:none}
+.me .av{background:var(--text);color:var(--bg);border-color:var(--text)}
+.bd{min-width:0}.nn{font-size:.72rem;color:var(--muted);margin-bottom:3px}.me .nn{text-align:right}
+.tx{padding:10px 14px;border-radius:16px 16px 16px 4px;background:var(--card);border:1px solid var(--line);font-size:.93rem;overflow-wrap:anywhere;white-space:pre-wrap}
+.me .tx{background:var(--text);color:var(--bg);border-color:var(--text);border-radius:16px 16px 4px 16px}
+.m.fail .tx{opacity:.4;text-decoration:line-through}
+.wn{font-size:.72rem;color:var(--muted);text-align:center;padding:8px 20px 0}
+.wf{display:flex;gap:8px;padding:10px 14px calc(14px + env(safe-area-inset-bottom,0px))}
+#mi{flex:1;min-width:0;font:inherit;font-size:16px;padding:12px 18px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--text);outline:0;transition:border-color .25s}
+.send{width:46px;height:46px;border-radius:50%;border:0;background:var(--text);color:var(--bg);cursor:pointer;display:grid;place-items:center;flex:none;transition:transform .3s var(--ease)}
+.send:hover{transform:scale(1.08) translateY(-1px)}.send:active{transform:scale(.9)}
+@media(max-width:560px){nav{display:none}#chat{padding:0}.win{height:100svh;width:100%;border-radius:0}.win::before{display:none}#nm{width:88px}}
+@media(max-width:640px){
+  .bar{padding:0 16px;gap:8px}
+  nav a{padding:8px 9px;font-size:.82rem}
+  .right{gap:10px}.logo{height:24px}
+  section{padding:56px 0}
+  .card{padding:22px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<header>
+  <div class="bar">
+    <nav>
+      <a href="#about" data-i="nav_about">About</a>
+      <a href="#features" data-i="nav_features">Features</a>
+      <a href="#contact" data-i="nav_contact">Contact</a>
+    </nav>
+    <div class="right">
+      <a class="try" href="app.html"><i></i><span class="t" data-i="try">Sign in</span></a>
+      <button class="icon-btn" id="setBtn" aria-label="Settings" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+      </button>
+      <img class="logo logo-img" src="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png" alt="me0w">
+    </div>
+  </div>
+</header>
+
+<div class="panel" id="panel" role="dialog" aria-label="Settings">
+  <div class="label" data-i="s_theme">Theme</div>
+  <div class="seg" id="themeSeg">
+    <button data-t="dark" data-i="s_dark">Dark</button>
+    <button data-t="light" data-i="s_light">Light</button>
+  </div>
+  <div class="label" data-i="s_lang">Language</div>
+  <div class="langs" id="langs"></div>
+  <div class="row"><span data-i="s_motion">Animations</span><button class="sw on" id="swAnim" aria-label="Toggle animations"></button></div>
+</div>
+
+<main id="top">
+  <div class="hero">
+    <div class="tag"><i></i><span class="t" data-i="tag">Coming soon</span></div>
+    <img class="hero-logo logo-img" src="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png" alt="me0w">
+    <h1 class="t" data-i="title">Chat. Play. Scroll.</h1>
+    <p class="sub t" data-i="sub">Chat with friends, play games together and scroll short videos, all in one place.</p>
+    <a class="cta" href="#contact"><span class="t" data-i="cta">Follow us</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg></a>
+  </div>
+
+  <div class="marq"><div class="track" id="track"></div></div>
+
+  <section id="about">
+    <div class="head reveal"><h2 class="t" data-i="about_h">What is it?</h2><p class="t" data-i="about_p">A new home for your community.</p></div>
+  </section>
+
+  <section id="features" style="padding-top:0"><div class="head reveal"><h2 class="t" data-i="feat_h">Everything in one place</h2><p class="t" data-i="feat_p">Thirteen reasons to switch.</p></div><div class="grid bento" id="fgrid"></div></section>
+
+  <section id="contact">
+    <div class="head reveal"><h2 class="t" data-i="c_h">Get in touch</h2><p class="t" data-i="c_p">Follow along for updates and launch news.</p></div>
+    <div class="grid">
+      <a class="card contact reveal" href="https://x.com/me0w_xyz" target="_blank" rel="noopener">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+        <div><b>X</b><span>@me0w_xyz</span></div>
+        <svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+      </a>
+      <a class="card contact reveal" href="https://www.tiktok.com/@me0w._xyz" target="_blank" rel="noopener">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.04-.1z"/></svg></div>
+        <div><b>TikTok</b><span>@me0w._xyz</span></div>
+        <svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+      </a>
+      <a class="card contact reveal" href="https://www.instagram.com/me0w_dev" target="_blank" rel="noopener">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></div>
+        <div><b>Instagram</b><span>@me0w_dev</span></div>
+        <svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <img class="logo logo-img" src="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png" alt="me0w">
+  <span>&copy; 2026</span>
+</footer>
+
+<script>
+const L={
+en:{n:"English",nav_about:"About",nav_features:"Features",nav_contact:"Contact",s_theme:"Theme",s_dark:"Dark",s_light:"Light",s_lang:"Language",s_motion:"Animations",tag:"Coming soon",title:"Chat. Play. Scroll.",sub:"Chat with friends, play games together and scroll short videos, all in one place.",cta:"Follow us",about_h:"What is it?",about_p:"A new home for your community.",f1_h:"Chat and servers",f1_p:"Build communities and talk with friends in a faster, cleaner space.",f2_h:"Plenty of games",f2_p:"Jump into games with friends instantly. No downloads, no setup.",f3_h:"Short videos",f3_p:"Scroll clips without leaving the app.",c_h:"Get in touch",c_p:"Follow along for updates and launch news.",feat_h:"Everything in one place",feat_p:"Thirteen reasons to switch.",try:"Sign in",g1_h:"Voice and video",g1_p:"Crystal-clear calls with friends and communities.",g2_h:"Screen sharing",g2_p:"Share your screen and play or work together live.",g3_h:"Leaderboards",g3_p:"Climb the ranks and run tournaments with friends.",g4_h:"Custom profiles",g4_p:"Make your profile yours with themes, banners and badges.",g5_h:"Smart notifications",g5_p:"Only the alerts you care about, nothing more.",g6_h:"Safety tools",g6_p:"Moderation, privacy controls and easy reporting built in.",g7_h:"Bots and mini-apps",g7_p:"Extend any server with bots, widgets and tools.",g8_h:"Multi-language",g8_p:"Use it in your own language, anywhere in the world.",g9_h:"Every device",g9_p:"Seamless on phone, tablet and desktop.",g10_h:"Party system",g10_p:"Squad up, invite friends and jump into games together."},
+th:{n:"ไทย",nav_about:"เกี่ยวกับ",nav_features:"ฟีเจอร์",nav_contact:"ติดต่อ",s_theme:"ธีม",s_dark:"มืด",s_light:"สว่าง",s_lang:"ภาษา",s_motion:"แอนิเมชัน",tag:"เร็ว ๆ นี้",title:"แชต เล่นเกม ไถคลิป",sub:"แชตกับเพื่อน เล่นเกมด้วยกัน และไถคลิปสั้น ครบในที่เดียว",cta:"ติดตามเรา",about_h:"คืออะไร",about_p:"บ้านหลังใหม่สำหรับคอมมูนิตี้ของคุณ",f1_h:"แชตและเซิร์ฟเวอร์",f1_p:"สร้างคอมมูนิตี้และคุยกับเพื่อนในพื้นที่ที่เร็วและสะอาดกว่า",f2_h:"เกมจุใจ",f2_p:"เข้าเล่นกับเพื่อนได้ทันที ไม่ต้องดาวน์โหลด ไม่ต้องตั้งค่า",f3_h:"คลิปสั้น",f3_p:"ไถคลิปได้โดยไม่ต้องออกจากแอป",c_h:"ติดต่อเรา",c_p:"ติดตามข่าวสารและการเปิดตัวได้ที่นี่",feat_h:"ครบจบในที่เดียว",feat_p:"13 เหตุผลที่คุณจะอยากย้ายมา",try:"เข้าสู่ระบบ",g1_h:"คุยเสียงและวิดีโอ",g1_p:"โทรคุยชัดใสกับเพื่อนและคอมมูนิตี้",g2_h:"แชร์หน้าจอ",g2_p:"แชร์หน้าจอเพื่อเล่นหรือทำงานด้วยกันแบบสด",g3_h:"อันดับและทัวร์นาเมนต์",g3_p:"ไต่อันดับและจัดแข่งกับเพื่อน",g4_h:"โปรไฟล์สุดเท่",g4_p:"ตกแต่งโปรไฟล์ด้วยธีม แบนเนอร์ และเหรียญตรา",g5_h:"แจ้งเตือนอัจฉริยะ",g5_p:"รับเฉพาะการแจ้งเตือนที่คุณสนใจ",g6_h:"เครื่องมือความปลอดภัย",g6_p:"ระบบดูแลชุมชน ความเป็นส่วนตัว และการรายงานในตัว",g7_h:"บอทและมินิแอป",g7_p:"เพิ่มความสามารถให้เซิร์ฟเวอร์ด้วยบอทและวิดเจ็ต",g8_h:"หลายภาษา",g8_p:"ใช้งานได้ในภาษาของคุณทั่วโลก",g9_h:"ทุกอุปกรณ์",g9_p:"ลื่นไหลทั้งมือถือ แท็บเล็ต และคอมพิวเตอร์",g10_h:"ระบบปาร์ตี้",g10_p:"รวมทีม ชวนเพื่อน แล้วเข้าเกมด้วยกันได้ทันที"},
+zh:{n:"中文",nav_about:"关于",nav_features:"功能",nav_contact:"联系",s_theme:"主题",s_dark:"深色",s_light:"浅色",s_lang:"语言",s_motion:"动画",tag:"即将推出",title:"聊天。游戏。刷视频。",sub:"与朋友聊天、一起玩游戏、刷短视频，一站搞定。",cta:"关注我们",about_h:"这是什么？",about_p:"属于你的社区新家园。",f1_h:"聊天与服务器",f1_p:"在更快、更简洁的空间里建立社区并与朋友交流。",f2_h:"海量游戏",f2_p:"与朋友即刻开玩，无需下载，无需设置。",f3_h:"短视频",f3_p:"无需离开应用即可刷视频。",c_h:"联系我们",c_p:"关注我们获取最新动态与发布消息。",feat_h:"一站式体验",feat_p:"十三个让你转投的理由。",try:"登录",g1_h:"语音与视频",g1_p:"与朋友和社区进行清晰的通话。",g2_h:"屏幕共享",g2_p:"共享屏幕，实时一起玩或协作。",g3_h:"排行榜",g3_p:"冲击排名，与朋友举办比赛。",g4_h:"个性主页",g4_p:"用主题、横幅和徽章打造专属资料。",g5_h:"智能通知",g5_p:"只接收你关心的提醒。",g6_h:"安全工具",g6_p:"内置管理、隐私控制和便捷举报。",g7_h:"机器人与小应用",g7_p:"用机器人和小工具扩展任何服务器。",g8_h:"多语言",g8_p:"全球任何地方都能使用你的语言。",g9_h:"全设备",g9_p:"手机、平板和电脑无缝衔接。",g10_h:"组队系统",g10_p:"组队、邀请好友，一起进入游戏。"},
+ja:{n:"日本語",nav_about:"概要",nav_features:"機能",nav_contact:"連絡先",s_theme:"テーマ",s_dark:"ダーク",s_light:"ライト",s_lang:"言語",s_motion:"アニメーション",tag:"近日公開",title:"チャット。ゲーム。動画。",sub:"友達とチャットし、ゲームで遊び、ショート動画を楽しめる。すべてひとつの場所で。",cta:"フォローする",about_h:"me0wとは",about_p:"あなたのコミュニティの新しい居場所。",f1_h:"チャットとサーバー",f1_p:"より速く、すっきりした空間でコミュニティを作り、友達と話せます。",f2_h:"豊富なゲーム",f2_p:"ダウンロード不要。友達とすぐに遊べます。",f3_h:"ショート動画",f3_p:"アプリを離れずに動画をスクロール。",c_h:"お問い合わせ",c_p:"最新情報やリリースのお知らせはこちら。",feat_h:"すべてがひとつに",feat_p:"乗り換えたくなる13の理由。",try:"ログイン",g1_h:"音声とビデオ",g1_p:"友達やコミュニティと高音質で通話。",g2_h:"画面共有",g2_p:"画面を共有して、一緒にプレイや作業。",g3_h:"ランキング",g3_p:"順位を上げて、友達と大会を開催。",g4_h:"カスタムプロフィール",g4_p:"テーマやバナー、バッジで自分らしく。",g5_h:"スマート通知",g5_p:"必要な通知だけを受け取れます。",g6_h:"安全ツール",g6_p:"モデレーション、プライバシー設定、通報機能を搭載。",g7_h:"ボットとミニアプリ",g7_p:"ボットやウィジェットでサーバーを拡張。",g8_h:"多言語対応",g8_p:"世界中どこでも自分の言語で利用可能。",g9_h:"全デバイス対応",g9_p:"スマホ、タブレット、PCでシームレスに。",g10_h:"パーティー機能",g10_p:"仲間を集めて、すぐにゲームへ。"},
+ko:{n:"한국어",nav_about:"소개",nav_features:"기능",nav_contact:"연락처",s_theme:"테마",s_dark:"다크",s_light:"라이트",s_lang:"언어",s_motion:"애니메이션",tag:"곧 공개",title:"채팅. 게임. 영상.",sub:"친구와 채팅하고, 함께 게임하고, 짧은 영상까지. 한 곳에서.",cta:"팔로우하기",about_h:"무엇인가요?",about_p:"커뮤니티를 위한 새로운 공간.",f1_h:"채팅과 서버",f1_p:"더 빠르고 깔끔한 공간에서 커뮤니티를 만들고 대화하세요.",f2_h:"다양한 게임",f2_p:"다운로드 없이 친구와 바로 게임을 시작하세요.",f3_h:"숏폼 영상",f3_p:"앱을 떠나지 않고 영상을 넘겨보세요.",c_h:"연락하기",c_p:"업데이트와 출시 소식을 받아보세요.",feat_h:"모든 것을 한 곳에",feat_p:"갈아탈 이유 열세 가지.",try:"로그인",g1_h:"음성 및 영상",g1_p:"친구, 커뮤니티와 선명한 통화.",g2_h:"화면 공유",g2_p:"화면을 공유하며 함께 게임하고 작업하세요.",g3_h:"리더보드",g3_p:"순위를 올리고 친구들과 대회를 열어보세요.",g4_h:"맞춤 프로필",g4_p:"테마, 배너, 배지로 나만의 프로필을 만드세요.",g5_h:"스마트 알림",g5_p:"필요한 알림만 받아보세요.",g6_h:"안전 도구",g6_p:"관리, 개인정보 보호, 간편 신고 기능 내장.",g7_h:"봇과 미니앱",g7_p:"봇과 위젯으로 서버를 확장하세요.",g8_h:"다국어 지원",g8_p:"전 세계 어디서나 내 언어로.",g9_h:"모든 기기",g9_p:"폰, 태블릿, 데스크톱에서 매끄럽게.",g10_h:"파티 시스템",g10_p:"파티를 만들고 친구를 초대해 바로 게임하세요."},
+es:{n:"Español",nav_about:"Acerca de",nav_features:"Funciones",nav_contact:"Contacto",s_theme:"Tema",s_dark:"Oscuro",s_light:"Claro",s_lang:"Idioma",s_motion:"Animaciones",tag:"Próximamente",title:"Chatea. Juega. Desliza.",sub:"Chatea con amigos, juega en equipo y mira videos cortos, todo en un solo lugar.",cta:"Síguenos",about_h:"¿Qué es?",about_p:"Un nuevo hogar para tu comunidad.",f1_h:"Chat y servidores",f1_p:"Crea comunidades y habla con amigos en un espacio más rápido y limpio.",f2_h:"Muchos juegos",f2_p:"Entra a jugar con amigos al instante. Sin descargas ni ajustes.",f3_h:"Videos cortos",f3_p:"Desliza clips sin salir de la app.",c_h:"Contacto",c_p:"Síguenos para novedades y noticias del lanzamiento.",feat_h:"Todo en un solo lugar",feat_p:"Trece razones para cambiarte.",try:"Iniciar sesión",g1_h:"Voz y video",g1_p:"Llamadas nítidas con amigos y comunidades.",g2_h:"Compartir pantalla",g2_p:"Comparte tu pantalla y juega o trabaja en vivo.",g3_h:"Clasificaciones",g3_p:"Sube de rango y organiza torneos con amigos.",g4_h:"Perfiles únicos",g4_p:"Personaliza tu perfil con temas, banners e insignias.",g5_h:"Notificaciones inteligentes",g5_p:"Solo las alertas que te importan.",g6_h:"Herramientas de seguridad",g6_p:"Moderación, privacidad y reportes integrados.",g7_h:"Bots y mini apps",g7_p:"Amplía cualquier servidor con bots y widgets.",g8_h:"Multilingüe",g8_p:"Úsalo en tu idioma, en cualquier parte del mundo.",g9_h:"Todos tus dispositivos",g9_p:"Fluido en móvil, tableta y escritorio.",g10_h:"Sistema de grupos",g10_p:"Forma tu equipo e invita amigos a jugar al instante."},
+fr:{n:"Français",nav_about:"À propos",nav_features:"Fonctions",nav_contact:"Contact",s_theme:"Thème",s_dark:"Sombre",s_light:"Clair",s_lang:"Langue",s_motion:"Animations",tag:"Bientôt disponible",title:"Discutez. Jouez. Scrollez.",sub:"Discutez avec vos amis, jouez ensemble et regardez des vidéos courtes, au même endroit.",cta:"Suivez-nous",about_h:"C'est quoi ?",about_p:"Un nouveau foyer pour votre communauté.",f1_h:"Chat et serveurs",f1_p:"Créez des communautés et parlez avec vos amis dans un espace plus rapide et plus net.",f2_h:"Plein de jeux",f2_p:"Lancez une partie avec vos amis instantanément. Sans téléchargement.",f3_h:"Vidéos courtes",f3_p:"Faites défiler des clips sans quitter l'appli.",c_h:"Nous contacter",c_p:"Suivez-nous pour les nouveautés et le lancement.",feat_h:"Tout au même endroit",feat_p:"Treize raisons de changer.",try:"Se connecter",g1_h:"Voix et vidéo",g1_p:"Des appels clairs avec vos amis et communautés.",g2_h:"Partage d'écran",g2_p:"Partagez votre écran pour jouer ou travailler en direct.",g3_h:"Classements",g3_p:"Grimpez dans le classement et organisez des tournois.",g4_h:"Profils personnalisés",g4_p:"Thèmes, bannières et badges pour un profil unique.",g5_h:"Notifications intelligentes",g5_p:"Seulement les alertes qui comptent pour vous.",g6_h:"Outils de sécurité",g6_p:"Modération, confidentialité et signalement intégrés.",g7_h:"Bots et mini-apps",g7_p:"Étendez n'importe quel serveur avec des bots et widgets.",g8_h:"Multilingue",g8_p:"Utilisez-le dans votre langue, partout dans le monde.",g9_h:"Tous vos appareils",g9_p:"Fluide sur mobile, tablette et ordinateur.",g10_h:"Système de groupe",g10_p:"Formez une équipe et lancez-vous dans une partie ensemble."},
+de:{n:"Deutsch",nav_about:"Info",nav_features:"Funktionen",nav_contact:"Kontakt",s_theme:"Design",s_dark:"Dunkel",s_light:"Hell",s_lang:"Sprache",s_motion:"Animationen",tag:"Demnächst",title:"Chatten. Spielen. Scrollen.",sub:"Chatte mit Freunden, spiele zusammen und schau Kurzvideos, alles an einem Ort.",cta:"Folge uns",about_h:"Was ist das?",about_p:"Ein neues Zuhause für deine Community.",f1_h:"Chat und Server",f1_p:"Baue Communities auf und sprich mit Freunden in einem schnelleren, klareren Raum.",f2_h:"Viele Spiele",f2_p:"Starte sofort Spiele mit Freunden. Ohne Download, ohne Einrichtung.",f3_h:"Kurzvideos",f3_p:"Scrolle durch Clips, ohne die App zu verlassen.",c_h:"Kontakt",c_p:"Folge uns für Updates und Neuigkeiten zum Start.",feat_h:"Alles an einem Ort",feat_p:"Dreizehn Gründe zum Wechseln.",try:"Anmelden",g1_h:"Sprache und Video",g1_p:"Kristallklare Anrufe mit Freunden und Communities.",g2_h:"Bildschirmfreigabe",g2_p:"Teile deinen Bildschirm und spiele oder arbeite live zusammen.",g3_h:"Bestenlisten",g3_p:"Steige im Ranking auf und veranstalte Turniere.",g4_h:"Eigene Profile",g4_p:"Gestalte dein Profil mit Themes, Bannern und Abzeichen.",g5_h:"Smarte Benachrichtigungen",g5_p:"Nur die Hinweise, die dich wirklich interessieren.",g6_h:"Sicherheitstools",g6_p:"Moderation, Datenschutz und einfaches Melden integriert.",g7_h:"Bots und Mini-Apps",g7_p:"Erweitere jeden Server mit Bots und Widgets.",g8_h:"Mehrsprachig",g8_p:"In deiner Sprache nutzbar, überall auf der Welt.",g9_h:"Jedes Gerät",g9_p:"Nahtlos auf Handy, Tablet und Desktop.",g10_h:"Party-System",g10_p:"Team bilden, Freunde einladen und gemeinsam losspielen."}
+};
+const root=document.documentElement,$=id=>document.getElementById(id);
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+function setTheme(t){root.dataset.theme=t;store.set('me0w-theme',t);
+  document.querySelectorAll('#themeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+function applyLang(code){
+  const d=L[code]||L.en;root.lang=code;
+  document.querySelectorAll('[data-i]').forEach(el=>{if(d[el.dataset.i]!==undefined)el.textContent=d[el.dataset.i]});
+  document.querySelectorAll('#langs button').forEach(b=>b.classList.toggle('on',b.dataset.l===code));
+  document.title='me0w';document.querySelectorAll('[data-ph]').forEach(el=>el.placeholder=d[el.dataset.ph]||'');
+}
+function setLang(code,animate){
+  store.set('me0w-lang',code);
+  const t=document.querySelectorAll('.t,nav a');
+  if(!animate){applyLang(code);return}
+  t.forEach(e=>e.classList.add('fade','out'));
+  setTimeout(()=>{applyLang(code);t.forEach(e=>e.classList.remove('out'))},230);
+}
+function setAnim(on){document.body.classList.toggle('calm',!on);$('swAnim').classList.toggle('on',on);store.set('me0w-anim',on?'1':'0')}
+
+const IC={f1:"M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",f2:"M6 12h4M8 10v4M15 13h.01M18 11h.01M2 8a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3z",f3:"M8 5v14l11-7z",
+g1:"M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3zM19 10v1a7 7 0 0 1-14 0v-1M12 18v4",g2:"M3 4h18v12H3zM8 20h8M12 16v4",g3:"M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3",
+g4:"M12 22a10 10 0 1 1 10-10c0 3-2 4-4 4h-2a2 2 0 0 0-1 3.7c.6.7.2 2.3-3 2.3zM7.5 11h.01M12 7h.01M16.5 11h.01",g5:"M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0",g6:"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+g7:"M5 5h14v14H5zM9 9h6v6H9zM9 2v3M15 2v3M9 19v3M15 19v3M19 9h3M19 15h3M2 9h3M2 15h3",g8:"M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20",g9:"M7 2h10v20H7zM11 18h2",
+g10:"M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"};
+const keys=Object.keys(IC);
+$('fgrid').innerHTML=keys.map((k,i)=>`<div class="card reveal"><span class="num">${String(i+1).padStart(2,'0')}</span><div class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="${IC[k]}"/></svg></div><h3 class="t" data-i="${k}_h"></h3><p class="t" data-i="${k}_p"></p></div>`).join('');
+const mq=keys.map(k=>`<span class="t" data-i="${k}_h"></span>`).join('');
+$('track').innerHTML=mq+mq;
+document.addEventListener('pointermove',e=>{const c=e.target.closest&&e.target.closest('.card');if(c){const r=c.getBoundingClientRect();c.style.setProperty('--mx',e.clientX-r.left+'px');c.style.setProperty('--my',e.clientY-r.top+'px')}});
+addEventListener('scroll',()=>{const h=root;$('prog').style.transform='scaleX('+(h.scrollTop/((h.scrollHeight-h.clientHeight)||1))+')'},{passive:true});
+
+const langsEl=$('langs');
+Object.keys(L).forEach(c=>{const b=document.createElement('button');b.dataset.l=c;b.textContent=L[c].n;b.onclick=()=>setLang(c,true);langsEl.appendChild(b)});
+document.querySelectorAll('#themeSeg button').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
+$('swAnim').onclick=()=>setAnim(document.body.classList.contains('calm'));
+
+const saved=store.get('me0w-lang');
+const nav=(navigator.language||'en').slice(0,2);
+setTheme(store.get('me0w-theme')||'dark');
+setLang(saved||(L[nav]?nav:'en'),false);
+setAnim(store.get('me0w-anim')!=='0');
+
+const panel=$('panel'),btn=$('setBtn');
+const close=()=>{panel.classList.remove('open');btn.setAttribute('aria-expanded','false')};
+btn.onclick=e=>{e.stopPropagation();const o=panel.classList.toggle('open');btn.setAttribute('aria-expanded',o)};
+document.addEventListener('click',e=>{if(!panel.contains(e.target))close()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%3)*100+'ms';io.observe(el)});
+</script>
+</body>
+</html>
