@@ -399,6 +399,11 @@ select.inp{padding:10px 12px;appearance:auto}
   .rchip.bi.open{padding:4px 11px 4px 8px;gap:6px}.rchip.bi.mini.open{padding:2px 8px 2px 5px}.bi.open .bl{max-width:160px;opacity:1}}
 
 .emj{display:inline-block;width:1.25em;height:1.25em;vertical-align:-.28em;object-fit:contain;user-select:text}
+
+.vt{display:inline-grid;place-items:center;width:17px;height:17px;flex:none;cursor:pointer;vertical-align:middle}
+.vt svg{width:100%;height:100%;filter:drop-shadow(0 0 6px rgba(59,130,246,.55))}
+.vrow{display:flex;align-items:center;gap:6px;min-width:0}
+.mrow .nmw{flex:1;min-width:0;display:flex;align-items:center;gap:5px}.mrow .nmw .nm{flex:0 1 auto}
 </style>
 </head>
 <body>
@@ -660,6 +665,10 @@ const isOwner=u=>!!cur&&cur.owner_id===u;
 const ADMIN_EMAIL='militina.dev@gmail.com';
 const isAdmin=()=>!!me&&String(me.email||'').toLowerCase()===ADMIN_EMAIL;
 const isAdm=u=>!!(P.get(u)||{}).is_admin;
+function vtick(uid){if(!badgesOf(uid).some(b=>b[0]==='verified'))return null;
+  const s=el('span','vt');s.title='Verified';s.setAttribute('aria-label','Verified');
+  s.innerHTML='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#3b82f6"/><path d="M7 12.5l3.2 3.2L17 8.8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  s.onclick=e=>{e.stopPropagation();toast('Verified account')};return s}
 const IC_CROWN='<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/>';
 const IC_TAG='<path d="M3 12V4h8l10 10-8 8z"/><path d="M7.5 8.5h.01"/>';
 const BADGES=[
@@ -898,7 +907,7 @@ function renderMembers(){
   const none=members.filter(m=>m.user_id!==cur.owner_id&&!roles.some(r=>r.id===m.role_id)&&on(m));if(none.length)groups.push({name:'Members',color:null,list:none});
   const off=members.filter(m=>!on(m)).sort(byName);
   const row=(m,isOn)=>{const b=el('button','mrow'+(isOn?'':' off')),w=el('div','avw');b.type='button';w.append(av(m.user_id),stDot(m.user_id));
-    const n=el('span','nm',nameOf(m.user_id));n.dataset.nm=m.user_id;const c=roleColor(m.user_id);if(c)n.style.color=c;b.append(w,n);b.onclick=()=>{memberCard(m.user_id);closeNav()};return b};
+    const n=el('span','nm',nameOf(m.user_id));n.dataset.nm=m.user_id;const c=roleColor(m.user_id);if(c)n.style.color=c;const nw=el('div','nmw');nw.append(n);{const v=vtick(m.user_id);if(v)nw.append(v)}b.append(w,nw);b.onclick=()=>{memberCard(m.user_id);closeNav()};return b};
   groups.forEach(g=>{const h=el('div','ch-h',g.name+' · '+g.list.length);if(g.color)h.style.color=g.color;mm.append(h);g.list.forEach(m=>mm.append(row(m,true)))});
   if(off.length){mm.append(el('div','ch-h','Offline · '+off.length));off.forEach(m=>mm.append(row(m,false)))}
   memEl.append(mm)}
@@ -906,9 +915,9 @@ function chip(name,color){const c=el('span','rchip'),i=el('i');i.style.backgroun
 function memberCard(uid){
   openModal((m,h)=>{
     const p=P.get(uid)||{},ban=el('div','pbanner');ban.style.background='linear-gradient(135deg,'+colorOf(uid)+',var(--accent2))';m.append(ban);
-    const pin=el('div','pin'),top=el('div','pc'),t=el('div');top.append(av(uid,'big'));const n=el('h3','',nameOf(uid));n.dataset.nm=uid;t.append(n);
+    const pin=el('div','pin'),top=el('div','pc'),t=el('div');top.append(av(uid,'big'));const n=el('h3','',nameOf(uid));n.dataset.nm=uid;{const v=vtick(uid);if(v){const hw=el('div','vrow');hw.append(n,v);t.append(hw)}else t.append(n)}
     const chips=el('div','chips');
-    const drawChips=()=>{chips.innerHTML='';badgesOf(uid).forEach(b=>chips.append(bchip(b[1],b[2],b[3])));if(isOwner(uid))chips.append(bchip('Server owner','#facc15',IC_CROWN));
+    const drawChips=()=>{chips.innerHTML='';badgesOf(uid).filter(b=>b[0]!=='verified').forEach(b=>chips.append(bchip(b[1],b[2],b[3])));if(isOwner(uid))chips.append(bchip('Server owner','#facc15',IC_CROWN));
       rolesOf(uid).filter(r=>!r.is_default).forEach(r=>chips.append(bchip(r.name,r.color,null)));
       if(isAdmin()||(cur&&can('manage_roles')&&canManage(uid))){const pb=el('button','rchip plus','+');pb.type='button';pb.title='Add or remove roles';pb.onclick=()=>rolePicker(uid,drawChips);chips.append(pb)}
       chips.append(chip(stLabel(uid),stCol(stOf(uid))))};drawChips();
@@ -1058,8 +1067,8 @@ function rtag(n,c){const s=el('span','rtag',n);s.style.color=c;s.style.borderCol
 function bchip(name,color,icon){const b=el('button','rchip bi');b.type='button';b.style.color=color;b.title=name;b.setAttribute('aria-label',name);
   b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(icon||IC_TAG)+'</svg>';
   b.append(el('span','bl',name));b.onclick=e=>{e.stopPropagation();b.classList.toggle('open')};return b}
-function nameRow(uid,w){const d=el('div','nrow');d.append(w);const tags=[];
-  badgesOf(uid).forEach(b=>tags.push([b[1],b[2],b[3]]));if(isOwner(uid))tags.push(['Server owner','#facc15',IC_CROWN]);
+function nameRow(uid,w){const d=el('div','nrow');d.append(w);{const v=vtick(uid);if(v)d.append(v)}const tags=[];
+  badgesOf(uid).filter(b=>b[0]!=='verified').forEach(b=>tags.push([b[1],b[2],b[3]]));if(isOwner(uid))tags.push(['Server owner','#facc15',IC_CROWN]);
   rolesOf(uid).filter(r=>!r.is_default).forEach(r=>tags.push([r.name,r.color,null]));
   tags.slice(0,4).forEach(([n,c,i])=>{const t=bchip(n,c,i);t.classList.add('mini');d.append(t)});
   if(tags.length>4)d.append(el('span','rtag','+'+(tags.length-4)));return d}
@@ -1252,7 +1261,7 @@ async function loadFriends(){
   fr=data||[];await loadP(fr.flatMap(f=>[f.requester,f.addressee]));renderFriends();renderHomeList()}
 document.querySelectorAll('.ftabs button').forEach(b=>b.onclick=()=>{ftab=b.dataset.t;renderFriends()});
 function frow(id,right){const r=el('div','row'),w=el('div','avw'),isOn=online.has(id);const a0=av(id);a0.onclick=()=>memberCard(id);w.append(a0,stDot(id));
-  const n=el('div','nm'),sp=el('span','',nameOf(id));sp.dataset.nm=id;n.append(sp,el('small','',stLabel(id)+((P.get(id)||{}).status_text?' · '+P.get(id).status_text:'')));r.append(w,n);right.forEach(x=>r.append(x));return r}
+  const n=el('div','nm'),sp=el('span','',nameOf(id));sp.dataset.nm=id;const l1=el('div','vrow');l1.append(sp);{const v=vtick(id);if(v)l1.append(v)}n.append(l1,el('small','',stLabel(id)+((P.get(id)||{}).status_text?' · '+P.get(id).status_text:'')));r.append(w,n);right.forEach(x=>r.append(x));return r}
 function emptyState(text){const e=el('div','empty');e.innerHTML=CAT;e.append(document.createTextNode(text));return e}
 function renderFriends(){
   const body=$('fbody'),other=f=>f.requester===me.id?f.addressee:f.requester;
