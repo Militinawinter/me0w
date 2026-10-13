@@ -387,6 +387,18 @@ select.inp{padding:10px 12px;appearance:auto}
 .bub.picb{padding:4px;white-space:normal}
 .pic{display:block;max-width:min(320px,100%);max-height:340px;border-radius:calc(var(--rb) - 6px);cursor:zoom-in;background:var(--card)}
 .picfull{display:block;width:100%;border-radius:12px}
+
+.rchip.bi{cursor:pointer;padding:4px 6px;gap:0;color:inherit;border-color:currentColor;background:color-mix(in srgb,currentColor 14%,transparent);transition:padding .25s var(--ease),gap .25s var(--ease)}
+.bi svg{width:15px;height:15px;flex:none;display:block}
+.bi .bl{max-width:0;overflow:hidden;white-space:nowrap;opacity:0;font-size:.76rem;font-weight:600;transition:max-width .3s var(--ease),opacity .2s}
+.rchip.bi:hover,.rchip.bi.open{padding:4px 11px 4px 8px;gap:6px}
+.bi:hover .bl,.bi.open .bl{max-width:160px;opacity:1}
+.rchip.bi.mini{padding:2px 4px}.bi.mini svg{width:12px;height:12px}.bi.mini .bl{font-size:.68rem}
+.rchip.bi.mini:hover,.rchip.bi.mini.open{padding:2px 8px 2px 5px}
+@media(hover:none){.rchip.bi:hover{padding:4px 6px;gap:0}.rchip.bi.mini:hover{padding:2px 4px}.bi:hover .bl{max-width:0;opacity:0}
+  .rchip.bi.open{padding:4px 11px 4px 8px;gap:6px}.rchip.bi.mini.open{padding:2px 8px 2px 5px}.bi.open .bl{max-width:160px;opacity:1}}
+
+.emj{display:inline-block;width:1.25em;height:1.25em;vertical-align:-.28em;object-fit:contain;user-select:text}
 </style>
 </head>
 <body>
@@ -471,7 +483,7 @@ const ini=n=>(n||'?').trim().charAt(0).toUpperCase()||'?';
 const T0=Date.now();
 function hideSplash(){const s=$('splash');if(!s||s.dataset.gone)return;s.dataset.gone=1;setTimeout(()=>{s.classList.add('out');setTimeout(()=>s.remove(),700)},Math.max(0,1400-(Date.now()-T0)))}
 setTimeout(hideSplash,9000);
-(function(){const t=['Double-tap a message to send a ❤️','Type @name to mention someone','Tap your avatar to set a status','Install me0w from Settings, Install app','Your theme follows you to every device'];$('spTip').textContent=t[Math.floor(Math.random()*t.length)]})();
+(function(){const t=['Double-tap a message to react with a heart','Type @name to mention someone','Tap your avatar to set a status','Install me0w from Settings, Install app','Your theme follows you to every device'];$('spTip').textContent=t[Math.floor(Math.random()*t.length)]})();
 const show=id=>{['setup','auth','app'].forEach(x=>$(x).hidden=x!==id);if(id!=='app')hideSplash()};
 let deferredInstall=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;if(window.onInstallReady)window.onInstallReady()});
@@ -580,6 +592,29 @@ function applyTheme(){
 }
 applyTheme();
 
+/* ===== Apple-style emoji pictures (Windows/Android/Linux). Apple devices already have them, so this skips there. ===== */
+const EMO_BASE='https://unpkg.com/emoji-datasource-apple@15.0.1/img/apple/64/';
+(function(){
+  if(/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(navigator.userAgent)||!window.MutationObserver)return;
+  const EMO=/(?:[\u{1F1E6}-\u{1F1FF}]{2}|[#*0-9]\uFE0F?\u20E3|\p{Extended_Pictographic}(?:\uFE0F|[\u{1F3FB}-\u{1F3FF}])?(?:\u200D\p{Extended_Pictographic}(?:\uFE0F|[\u{1F3FB}-\u{1F3FF}])?)*)/gu;
+  const TEST=new RegExp(EMO.source,'u'),SKIP=/^(SCRIPT|STYLE|TEXTAREA|INPUT|SELECT)$/;
+  const isEmoji=m=>{const c=m.codePointAt(0);return c>=0x2600||m.includes('\uFE0F')||m.includes('\u20E3')};
+  function pic(m){
+    const cps=[...m].map(c=>c.codePointAt(0).toString(16)),st=cps.filter(c=>c!=='fe0f');
+    const tries=[...new Set([cps.join('-'),st.join('-'),[st[0],'fe0f',...st.slice(1)].join('-')])];let i=0;
+    const im=new Image();im.className='emj';im.alt=m;im.draggable=false;
+    const next=()=>{if(i<tries.length){im.src=EMO_BASE+tries[i++]+'.png'}else{const s=document.createElement('span');s.className='emn';s.textContent=m;im.replaceWith(s)}};
+    im.onerror=next;next();return im}
+  function emojify(root){
+    if(!root||root.nodeType!==1&&root.nodeType!==11)return;
+    const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nodes=[];
+    for(let n;n=w.nextNode();){const p=n.parentNode;if(!p||SKIP.test(p.nodeName)||(p.closest&&p.closest('.emn,.emj')))continue;if(TEST.test(n.nodeValue))nodes.push(n)}
+    nodes.forEach(n=>{const t=n.nodeValue,frag=document.createDocumentFragment();let last=0,did=false;
+      t.replace(EMO,(m,off)=>{if(!isEmoji(m))return m;if(off>last)frag.append(t.slice(last,off));frag.append(pic(m));last=off+m.length;did=true;return m});
+      if(!did)return;if(last<t.length)frag.append(t.slice(last));n.replaceWith(frag)})}
+  const mo=new MutationObserver(ms=>{for(const m of ms){m.addedNodes.forEach(n=>{if(n.nodeType===1)emojify(n);else if(n.nodeType===3)emojify(n.parentNode)});if(m.type==='characterData')emojify(m.target.parentNode)}});
+  mo.observe(document.body,{childList:true,subtree:true,characterData:true});emojify(document.body)})();
+
 if(!SUPABASE_URL||!SUPABASE_ANON_KEY){show('setup')}else{boot()}
 
 function boot(){
@@ -594,14 +629,14 @@ const nameOf=id=>(P.get(id)||{}).username||'unknown';
 const colorOf=id=>{const p=P.get(id);if(p&&p.color)return p.color;let h=0;for(const ch of String(id))h=(h*31+ch.charCodeAt(0))>>>0;return 'hsl('+(h%360)+' 55% 46%)'};
 const hueOf=id=>{let h=0;for(const ch of String(id))h=(h*31+ch.charCodeAt(0))>>>0;return h%360};
 async function loadP(ids){const need=[...new Set(ids)].filter(i=>i&&!P.has(i));if(!need.length)return;
-  const {data}=await sb.from('profiles').select('id,username,color,bio,status,status_text,avatar_url,is_admin').in('id',need);(data||[]).forEach(p=>P.set(p.id,p))}
+  const {data}=await sb.from('profiles').select('id,username,color,bio,status,status_text,avatar_url,is_admin,badges').in('id',need);(data||[]).forEach(p=>P.set(p.id,p))}
 function paintAv(e){const id=e.dataset.av,p=P.get(id)||{};
   if(p.avatar_url){e.textContent='';e.style.backgroundImage='url("'+p.avatar_url+'")';e.style.backgroundSize='cover';e.style.backgroundPosition='center'}
   else{e.textContent=ini(nameOf(id));e.style.backgroundImage='';e.style.backgroundSize=''}
   e.style.backgroundColor=colorOf(id)}
 function av(id,cls){const e=el('div','av'+(cls?' '+cls:''));e.dataset.av=id;paintAv(e);return e}
 function refreshNames(){document.querySelectorAll('[data-nm]').forEach(e=>e.textContent=nameOf(e.dataset.nm));document.querySelectorAll('[data-av]').forEach(paintAv);
-  renderMembers();renderMe();if(!$('home').hidden&&ftab!=='add')renderFriends()}
+  renderMembers();renderMe();if(!$('chat').hidden&&msgs.length)renderMsgs('keep');if(!$('home').hidden&&ftab!=='add')renderFriends()}
 async function copy(t,msg){try{await navigator.clipboard.writeText(t);toast(msg)}catch(e){toast('Copy failed')}}
 const sameDay=(a,b)=>a.toDateString()===b.toDateString();
 const hm=d=>new Date(d).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:S.h24?false:undefined});
@@ -625,6 +660,31 @@ const isOwner=u=>!!cur&&cur.owner_id===u;
 const ADMIN_EMAIL='militina.dev@gmail.com';
 const isAdmin=()=>!!me&&String(me.email||'').toLowerCase()===ADMIN_EMAIL;
 const isAdm=u=>!!(P.get(u)||{}).is_admin;
+const IC_CROWN='<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/>';
+const IC_TAG='<path d="M3 12V4h8l10 10-8 8z"/><path d="M7.5 8.5h.01"/>';
+const BADGES=[
+['owner','Owner','#facc15',IC_CROWN],
+['founder','Founder','#f59e0b','<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.2l-5.5 3 1-6.2L3 9.6l6.2-.9z"/>'],
+['admin','Admin','#f43f5e','<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>'],
+['dev','Developer','#38bdf8','<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/>'],
+['mod','Moderator','#22c55e','<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>'],
+['helper','Helper','#14b8a6','<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M5.6 5.6l3.5 3.5M14.9 14.9l3.5 3.5M18.4 5.6l-3.5 3.5M9.1 14.9l-3.5 3.5"/>'],
+['designer','Designer','#ec4899','<path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2 0-1.5-1-1.5-1-3s1-2 2.5-2H18a3 3 0 0 0 3-3c0-4-4-8-9-8z"/><path d="M7.5 11h.01M10 7h.01M15 7h.01"/>'],
+['tester','Tester','#f97316','<path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3M7.5 15h9"/>'],
+['bughunter','Bug Hunter','#84cc16','<path d="M9 7a3 3 0 0 1 6 0M8 9h8v6a4 4 0 0 1-8 0zM4 13h4M16 13h4M5 7l3 2M19 7l-3 2M5 19l3-2M19 19l-3-2"/>'],
+['verified','Verified','#3b82f6','<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>'],
+['vip','VIP','#a78bfa','<path d="M6 4h12l4 5-10 12L2 9zM2 9h20M9 4l-2 5 5 12 5-12-2-5"/>'],
+['supporter','Supporter','#fb7185','<path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/>'],
+['booster','Booster','#d946ef','<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'],
+['early','Early Bird','#fbbf24','<path d="M12 3v3M4.2 10.2l2.1 2.1M19.8 10.2l-2.1 2.1M3 18h18M7 18a5 5 0 0 1 10 0"/>'],
+['cat','Cat','#c084fc','<path d="M5 10V4l4 3a8 8 0 0 1 6 0l4-3v6c1.5 2 1.5 4 0 6-1.5 2.5-4 3-7 3s-5.5-.5-7-3c-1.5-2-1.5-4 0-6z"/><path d="M9 12h.01M15 12h.01M10.5 15.5l1.5 1 1.5-1"/>'],
+['artist','Artist','#f472b6','<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'],
+['musician','Musician','#22d3ee','<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'],
+['gamer','Gamer','#8b5cf6','<path d="M6 8h12a4 4 0 0 1 4 4v2a3 3 0 0 1-5.5 1.6L15 14H9l-1.5 1.6A3 3 0 0 1 2 14v-2a4 4 0 0 1 4-4z"/><path d="M7 11v2M6 12h2M15.5 11.5h.01M17.5 13h.01"/>'],
+['streamer','Streamer','#ef4444','<path d="M3 5h18v12H3zM8 21h8M12 17v4"/><path d="M10 9l5 2.5-5 2.5z"/>'],
+['friend','Friend','#60a5fa','<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9.5h.01M15 9.5h.01"/>'],
+['legend','Legend','#eab308','<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/>']];
+const badgesOf=u=>{const p=P.get(u)||{},s=new Set(p.badges||[]);if(p.is_admin)s.add('admin');return BADGES.filter(b=>s.has(b[0]))};
 const rolesOf=u=>{const m=members.find(x=>x.user_id===u);if(!m)return[];const ids=new Set(mroles.has(u)?mroles.get(u):[m.role_id]);return roles.filter(r=>r.is_default||ids.has(r.id)).sort((a,b)=>b.pos-a.pos)};
 const roleOf=u=>rolesOf(u)[0]||null;
 const rank=u=>isOwner(u)?1000:((roleOf(u)||{}).pos||0);
@@ -699,9 +759,9 @@ async function enter(){
   else goHome();
   hideSplash();startRealtime()}
 function teardown(){stopRealtime();stack.slice().forEach(h=>h.close());servers=[];cur=null;curCh=null;msgs=[];members=[];roles=[];chans=[];online=new Set();P.clear();$('srv').innerHTML='';$('msgs').innerHTML='';closeNav()}
-function renderMe(){if(!me)return;const m=$('me');m.innerHTML='';const p=P.get(me.id)||{},k=myStatus(),t=el('button','mt');t.type='button';t.title='Set your status';
-  const sm=el('small','',p.status_text||(k==='invisible'?'Invisible':ST[k]));sm.style.color=stCol(k)||'var(--muted)';t.append(el('b','',nameOf(me.id)),sm);t.onclick=openStatus;
-  const w=el('button','avw');w.type='button';w.onclick=openStatus;w.append(av(me.id),stDot(me.id));
+function renderMe(){if(!me)return;const m=$('me');m.innerHTML='';const p=P.get(me.id)||{},k=myStatus(),t=el('button','mt');t.type='button';t.title='View your profile';
+  const sm=el('small','',p.status_text||(k==='invisible'?'Invisible':ST[k]));sm.style.color=stCol(k)||'var(--muted)';t.append(el('b','',nameOf(me.id)),sm);t.onclick=()=>memberCard(me.id);
+  const w=el('button','avw');w.type='button';w.onclick=()=>memberCard(me.id);w.append(av(me.id),stDot(me.id));
   m.append(w,t,ib('gear','Settings',()=>openUserSettings()))}
 
 /* ---- realtime ---- */
@@ -848,9 +908,9 @@ function memberCard(uid){
     const p=P.get(uid)||{},ban=el('div','pbanner');ban.style.background='linear-gradient(135deg,'+colorOf(uid)+',var(--accent2))';m.append(ban);
     const pin=el('div','pin'),top=el('div','pc'),t=el('div');top.append(av(uid,'big'));const n=el('h3','',nameOf(uid));n.dataset.nm=uid;t.append(n);
     const chips=el('div','chips');
-    const drawChips=()=>{chips.innerHTML='';if(isAdm(uid))chips.append(chip('Admin','#f43f5e'));if(isOwner(uid))chips.append(chip('Owner','#facc15'));
-      rolesOf(uid).filter(r=>!r.is_default).forEach(r=>chips.append(chip(r.name,r.color)));
-      if(can('manage_roles')&&canManage(uid)){const pb=el('button','rchip plus','+');pb.type='button';pb.title='Add or remove roles';pb.onclick=()=>rolePicker(uid,drawChips);chips.append(pb)}
+    const drawChips=()=>{chips.innerHTML='';badgesOf(uid).forEach(b=>chips.append(bchip(b[1],b[2],b[3])));if(isOwner(uid))chips.append(bchip('Server owner','#facc15',IC_CROWN));
+      rolesOf(uid).filter(r=>!r.is_default).forEach(r=>chips.append(bchip(r.name,r.color,null)));
+      if(isAdmin()||(cur&&can('manage_roles')&&canManage(uid))){const pb=el('button','rchip plus','+');pb.type='button';pb.title='Add or remove roles';pb.onclick=()=>rolePicker(uid,drawChips);chips.append(pb)}
       chips.append(chip(stLabel(uid),stCol(stOf(uid))))};drawChips();
     t.append(chips);top.append(t);pin.append(top);
     if(p.status_text)pin.append(el('p','mp','“'+p.status_text+'”'));
@@ -859,7 +919,7 @@ function memberCard(uid){
     if(uid!==me.id){const isF=fr.some(f=>f.status==='accepted'&&(f.requester===uid||f.addressee===uid));
       pin.append(button(isF?'Message':'Add friend',async()=>{if(isF){h.close();openDM(uid)}else{const {data,error}=await sb.rpc('add_friend',{uname:nameOf(uid)});
         if(error)toast(error.message);else{toast(data==='accepted'?'You are now friends':'Friend request sent');loadFriends()}}}))}
-    if(uid===me.id){pin.append(button('Edit profile',async()=>{h.close();openUserSettings('account')}))}
+    if(uid===me.id){pin.append(button('Edit profile',async()=>{h.close();openUserSettings('account')}),button('Set status',async()=>{h.close();openStatus()},'ghost'))}
     if(canManage(uid)){
       
       if(can('kick'))pin.append(button('Remove from server',async()=>{if(await confirmBox({title:'Remove '+nameOf(uid)+'?',text:'They can rejoin with an invite code.',ok:'Remove',danger:true})){
@@ -995,12 +1055,25 @@ function metaRow(g){
   return d}
 /* role tags */
 function rtag(n,c){const s=el('span','rtag',n);s.style.color=c;s.style.borderColor=c;return s}
-function nameRow(uid,w){const d=el('div','nrow');d.append(w);const tags=[];if(isAdm(uid))tags.push(['Admin','#f43f5e']);if(isOwner(uid))tags.push(['Owner','#facc15']);
-  rolesOf(uid).filter(r=>!r.is_default).forEach(r=>tags.push([r.name,r.color]));
-  tags.slice(0,2).forEach(([n,c])=>d.append(rtag(n,c)));if(tags.length>2)d.append(el('span','rtag','+'+(tags.length-2)));return d}
+function bchip(name,color,icon){const b=el('button','rchip bi');b.type='button';b.style.color=color;b.title=name;b.setAttribute('aria-label',name);
+  b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(icon||IC_TAG)+'</svg>';
+  b.append(el('span','bl',name));b.onclick=e=>{e.stopPropagation();b.classList.toggle('open')};return b}
+function nameRow(uid,w){const d=el('div','nrow');d.append(w);const tags=[];
+  badgesOf(uid).forEach(b=>tags.push([b[1],b[2],b[3]]));if(isOwner(uid))tags.push(['Server owner','#facc15',IC_CROWN]);
+  rolesOf(uid).filter(r=>!r.is_default).forEach(r=>tags.push([r.name,r.color,null]));
+  tags.slice(0,4).forEach(([n,c,i])=>{const t=bchip(n,c,i);t.classList.add('mini');d.append(t)});
+  if(tags.length>4)d.append(el('span','rtag','+'+(tags.length-4)));return d}
 function rolePicker(uid,done){openModal((m,h)=>{
-  m.append(el('h3','','Roles for '+nameOf(uid)),el('p','mp','Tick the roles this member should have. You can only give roles below your own rank.'));
-  const list=el('div');m.append(list);const own=roles.filter(r=>!r.is_default&&(isOwner(me.id)||r.pos<rank(me.id)));
+  m.append(el('h3','','Roles for '+nameOf(uid)));
+  if(isAdmin()){m.append(el('p','mp','Profile roles show everywhere on their profile and next to their name.'));
+    BADGES.forEach(b=>{const on=badgesOf(uid).some(x=>x[0]===b[0]),row=swRow(b[1],'',on,async v=>{
+      const prev=(P.get(uid)||{}).badges||[],nx=new Set(prev);v?nx.add(b[0]):nx.delete(b[0]);P.set(uid,{...P.get(uid),badges:[...nx]});refreshNames();
+      const {error}=await sb.rpc('me0w_set_badge',{p_uid:uid,p_badge:b[0],p_on:v});
+      if(error){toast(error.message);P.set(uid,{...P.get(uid),badges:prev});refreshNames()}});
+      row.querySelector('b').style.color=b[2];m.append(row)});
+    if(cur)m.append(el('div','sechd','Server roles'))}
+  if(cur)m.append(el('p','mp','Tick the server roles this member should have. You can only give roles below your own rank.'));
+  const list=el('div');if(cur)m.append(list);const own=roles.filter(r=>!r.is_default&&(isOwner(me.id)||r.pos<rank(me.id)));
   const draw=()=>{list.innerHTML='';if(!own.length)list.append(el('p','mp','No roles available yet. Create some in Server settings, Roles.'));
     own.forEach(r=>{const on=rolesOf(uid).some(x=>x.id===r.id),row=swRow(r.name,'',on,async v=>{
       const prev=(mroles.get(uid)||rolesOf(uid).map(x=>x.id)).slice(),next=new Set(prev);v?next.add(r.id):next.delete(r.id);
@@ -1202,7 +1275,7 @@ function renderFriends(){
 /* ================= user settings ================= */
 const AV_COLORS=['#ef4444','#f97316','#f59e0b','#22c55e','#14b8a6','#3b82f6','#6366f1','#8b5cf6','#ec4899','#64748b'];
 async function saveProfile(patch){
-  const {data,error}=await sb.from('profiles').update(patch).eq('id',me.id).select('id,username,color,bio,status,status_text,avatar_url,is_admin').single();
+  const {data,error}=await sb.from('profiles').update(patch).eq('id',me.id).select('id,username,color,bio,status,status_text,avatar_url,is_admin,badges').single();
   if(error){toast(error.code==='23505'?'That username is taken':error.code==='23514'?'Invalid value (username: 3 to 20 letters, numbers, _ or .)':error.message);return false}
   P.set(me.id,{...P.get(me.id),...data});refreshNames();return true}
 async function confirmLogout(){
@@ -1311,7 +1384,7 @@ function squareImg(file){return new Promise(res=>{const u=URL.createObjectURL(fi
 function installTab(c){
   const hold=el('div');c.append(hold);
   const draw=()=>{hold.innerHTML='';
-    if(DEV.standalone){hold.append(el('p','hint','me0w is installed on this device. 🎉'));return}
+    if(DEV.standalone){hold.append(el('p','hint','me0w is installed on this device.'));return}
     hold.append(el('p','hint','Install me0w for a full-screen app with its own icon on your home screen.'));
     if(deferredInstall){hold.append(button('Install me0w',async()=>{deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;draw()}));return}
     hold.append(el('p','hint',DEV.os==='iPhone'||DEV.os==='iPad'?'On iPhone or iPad: open this page in Safari, tap Share, then Add to Home Screen.':'Open your browser menu and choose Install app or Add to Home screen. The page must be served over https.'))};
