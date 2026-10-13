@@ -157,8 +157,8 @@ select.inp{padding:10px 12px;appearance:auto}
 .col{display:flex;flex-direction:column;gap:3px;min-width:0;max-width:min(78%,660px)}
 .grp.mine .col{align-items:flex-end}
 .gname{font-weight:700;font-size:.8rem;margin:0 6px 1px;cursor:pointer;width:fit-content}.gname:hover{text-decoration:underline}
-.msg{position:relative;display:flex;max-width:100%}
-.grp.mine .msg{justify-content:flex-end}
+.msg{position:relative;display:flex;flex-direction:column;align-items:flex-start;max-width:100%}
+.grp.mine .msg{align-items:flex-end}
 .bub{padding:9px 14px;border-radius:var(--rb);background:var(--bubble);border:1px solid var(--bubble-edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.12);overflow-wrap:anywhere;white-space:pre-wrap;line-height:1.45;font-size:.97rem;width:fit-content;max-width:100%;min-width:0;transition:box-shadow .3s}
 .grp:not(.mine) .msg:not(.first) .bub{border-top-left-radius:6px}
 .grp:not(.mine) .msg:not(.last) .bub{border-bottom-left-radius:6px}
@@ -294,6 +294,19 @@ select.inp{padding:10px 12px;appearance:auto}
 .dev .badge.live{background:rgba(52,211,153,.16);color:#34d399}
 .sechd{font-family:var(--disp);font-weight:700;font-size:1.02rem;margin:26px 0 4px}
 
+.nrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 6px 1px}.nrow .gname{margin:0}
+.rtag{font-size:.62rem;font-weight:700;padding:1px 8px;border:1px solid;border-radius:99px;line-height:1.5;background:color-mix(in srgb,currentColor 14%,transparent);white-space:nowrap}
+.rxs{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.grp.mine .rxs{justify-content:flex-end}
+.rx{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-size:.84rem}
+.rx b{font-size:.74rem;font-weight:600;color:var(--muted)}.rx.mine{background:var(--accent-soft);border-color:var(--accent-text)}.rx.mine b{color:var(--text)}
+.rpick{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;margin-top:10px}.rpick button{font-size:1.5rem;height:44px;border-radius:12px}.rpick button:hover{background:var(--hover)}
+.mst{margin-left:8px;font-size:.69rem}.mst.failed{color:#fb7185}.mst.seen{color:var(--muted)}.mst.seen.on{color:var(--accent-text);font-weight:600}button.mst.seen.on{cursor:pointer}
+.mlink{color:var(--accent-text);font-size:.69rem;margin-left:8px;font-weight:600}
+.msg.pending .bub{opacity:.6}.msg.failed .bub{opacity:1;box-shadow:0 0 0 1.5px #fb7185}
+.ub{margin-left:auto;width:9px;height:9px;border-radius:50%;background:var(--accent-bg);flex:none}
+.st.online{background:#34d399;box-shadow:0 0 10px #34d399}.st.idle{background:#fbbf24}.st.dnd{background:#f43f5e}
+.rchip.plus{cursor:pointer;font-weight:700;padding:3px 12px;color:var(--accent-text)}
+.me .mt{text-align:left;cursor:pointer}.me .avw{cursor:pointer}.cirow .avw .av{width:28px;height:28px;font-size:.7rem}
 /* ---------- tablet: members become a side sheet ---------- */
 @media(max-width:1120px){
   #app,#app.nomem,#app.home{grid-template-columns:76px 252px minmax(0,1fr)}
@@ -342,7 +355,7 @@ select.inp{padding:10px 12px;appearance:auto}
   <div class="brand"><img class="logo" src="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png" alt=""><b>me0w</b></div>
   <h2>Connect your backend</h2><p class="s">One-time setup, about 5 minutes.</p>
   <ol><li>Create a free project at <code>supabase.com</code></li>
-  <li>SQL Editor: run <code>schema.sql</code>, then <code>schema_v2.sql</code></li>
+  <li>SQL Editor: run <code>schema.sql</code>, then <code>schema_v2.sql</code>, then <code>schema_v3.sql</code></li>
   <li>Authentication, Providers, Email: turn off <code>Confirm email</code> while testing</li>
   <li>Project Settings, API: copy the URL and anon key into the top of this file's script</li></ol>
 </div></div>
@@ -424,7 +437,8 @@ const IC={
  link:svg('<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>'),
  phone:svg('<rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/>'),
  tablet:svg('<rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M11 18h2"/>'),
- desktop:svg('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>')
+ desktop:svg('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'),
+ smile:svg('<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9.5h.01M15 9.5h.01"/>')
 };
 const CAT='<svg class="cat" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 28V8l14 10a30 30 0 0 1 16 0L54 8v20c3 5 4 10 2 15-3 9-12 13-24 13S11 52 8 43c-2-5-1-10 2-15z" fill="currentColor" fill-opacity=".14"/><circle cx="24" cy="35" r="2.4" fill="currentColor" stroke="none"/><circle cx="40" cy="35" r="2.4" fill="currentColor" stroke="none"/><path d="M29 42l3 3 3-3M32 45v3M6 38l10 2M6 44l10-2M58 38l-10 2M58 44l-10-2"/></svg>';
 const ib=(icon,title,fn,cls)=>{const b=el('button','ib'+(cls?' '+cls:''));b.type='button';b.innerHTML=IC[icon];b.title=title;b.setAttribute('aria-label',title);b.onclick=e=>{e.stopPropagation();fn(e)};return b};
@@ -462,7 +476,7 @@ const PRESETS={
  candy:{n:'Candy',a:'#38bdf8',b:'#f472b6',g1:'#0c3a5c',g2:'#1d0b30',grad:true},
  mint:{n:'Mint',a:'#34d399',b:'#22d3ee',g1:'#0b3b3a',g2:'#04101a',grad:true}
 };
-const DEF={mode:'dark',preset:'violet',a:'#8b5cf6',b:'#ec4899',grad:true,g1:'#2a1458',g2:'#07040f',ang:160,radius:12,fs:15,compact:false,anim:true,glass:true,gblur:26,frost:14,glow:true,msgStyle:'bubble',h24:false};
+const DEF={mode:'dark',preset:'violet',a:'#8b5cf6',b:'#ec4899',grad:true,g1:'#2a1458',g2:'#07040f',ang:160,radius:12,fs:15,compact:false,anim:true,glass:true,gblur:26,frost:14,glow:true,msgStyle:'bubble',h24:false,receipts:true};
 const hex2rgb=h=>{h=String(h).replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16)||0;return[n>>16&255,n>>8&255,n&255]};
 const rgb2hex=(r,g,b)=>'#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');
 const mix=(h1,h2,t)=>{const a=hex2rgb(h1),b=hex2rgb(h2);return rgb2hex(a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t)};
@@ -517,13 +531,14 @@ const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const MSG='id,channel_id,content,created_at,edited_at,user_id';
 let me=null,P=new Map(),servers=[],cur=null,chans=[],roles=[],members=[],curCh=null,msgs=[],hasMore=false,online=new Set(),typers=new Map(),
     editingId=null,editDraft='',fr=[],ftab='all',entered=false,mode='in',sync=null,pres=null,chanRt=null,syncReady=false,ssHandle=null,usHandle=null,lastTyped=0,
-    selId=null,away=0,pinned=true,lastLocal=0,unreadTitle=0;
+    selId=null,away=0,pinned=true,lastLocal=0,unreadTitle=0,
+    dmWith=null,dmRt=null,mroles=new Map(),reads=[],pend=[],tmpN=0,unread=new Set(),stMap=new Map(),lastReadSent=new Map();
 const debounce=(f,ms)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>f(...a),ms)}};
 const nameOf=id=>(P.get(id)||{}).username||'unknown';
 const colorOf=id=>{const p=P.get(id);if(p&&p.color)return p.color;let h=0;for(const ch of String(id))h=(h*31+ch.charCodeAt(0))>>>0;return 'hsl('+(h%360)+' 55% 46%)'};
 const hueOf=id=>{let h=0;for(const ch of String(id))h=(h*31+ch.charCodeAt(0))>>>0;return h%360};
 async function loadP(ids){const need=[...new Set(ids)].filter(i=>i&&!P.has(i));if(!need.length)return;
-  const {data}=await sb.from('profiles').select('id,username,color,bio').in('id',need);(data||[]).forEach(p=>P.set(p.id,p))}
+  const {data}=await sb.from('profiles').select('id,username,color,bio,status,status_text').in('id',need);(data||[]).forEach(p=>P.set(p.id,p))}
 function paintAv(e){const id=e.dataset.av;e.textContent=ini(nameOf(id));e.style.backgroundColor=colorOf(id)}
 function av(id,cls){const e=el('div','av'+(cls?' '+cls:''));e.dataset.av=id;paintAv(e);return e}
 function refreshNames(){document.querySelectorAll('[data-nm]').forEach(e=>e.textContent=nameOf(e.dataset.nm));document.querySelectorAll('[data-av]').forEach(paintAv);
@@ -543,12 +558,13 @@ function incoming(m){
   if(m.user_id===me.id)return;
   if(L.sound)blip();
   if(document.hidden){unreadTitle++;document.title='('+unreadTitle+') me0w';
-    if(L.notif&&'Notification' in window&&Notification.permission==='granted'&&mentionsMe(m.content)){
+    if(L.notif&&'Notification' in window&&Notification.permission==='granted'&&(m.dm||mentionsMe(m.content))){
       try{const c=chans.find(x=>x.id===m.channel_id),n=new Notification(nameOf(m.user_id)+(c?' in #'+c.name:''),{body:m.content.slice(0,140),tag:'me0w-mention',icon:'https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png'});n.onclick=()=>{window.focus();n.close()}}catch(e){}}}}
 
 /* ---- permissions ---- */
 const isOwner=u=>!!cur&&cur.owner_id===u;
-const roleOf=u=>{const m=members.find(x=>x.user_id===u);return m?roles.find(r=>r.id===m.role_id):null};
+const rolesOf=u=>{const m=members.find(x=>x.user_id===u);if(!m)return[];const ids=new Set(mroles.has(u)?mroles.get(u):[m.role_id]);return roles.filter(r=>r.is_default||ids.has(r.id)).sort((a,b)=>b.pos-a.pos)};
+const roleOf=u=>rolesOf(u)[0]||null;
 const rank=u=>isOwner(u)?1000:((roleOf(u)||{}).pos||0);
 const can=k=>isOwner(me.id)||!!(roleOf(me.id)&&roleOf(me.id)['can_'+k]);
 const canManage=u=>u!==me.id&&!isOwner(u)&&(isOwner(me.id)||rank(me.id)>rank(u));
@@ -614,22 +630,29 @@ async function enter(){
   await loadP([me.id]);
   if(L.sync){const {data:pr}=await sb.from('profiles').select('settings').eq('id',me.id).single();
     if(pr&&pr.settings&&Object.keys(pr.settings).length){S={...DEF,...pr.settings};ls.set('me0w-settings',JSON.stringify(S));applyTheme()}}
-  renderMe();show('app');await loadServers();
+  renderMe();show('app');loadFriends();await loadServers();
   const code=ls.get('me0w-join');
   if(code){ls.del('me0w-join');$('inv').hidden=true;const {data,error}=await sb.rpc('join_server',{code});
     if(error){toast(error.message);goHome()}else{await loadServers();await selectServer(data);toast('Joined server')}}
   else goHome();
   startRealtime()}
 function teardown(){stopRealtime();stack.slice().forEach(h=>h.close());servers=[];cur=null;curCh=null;msgs=[];members=[];roles=[];chans=[];online=new Set();P.clear();$('srv').innerHTML='';$('msgs').innerHTML='';closeNav()}
-function renderMe(){if(!me)return;const m=$('me');m.innerHTML='';const t=el('div','mt');t.append(el('b','',nameOf(me.id)),el('small','','Online'));
-  const b=ib('gear','Settings',()=>openUserSettings());m.append(av(me.id),t,b)}
+function renderMe(){if(!me)return;const m=$('me');m.innerHTML='';const p=P.get(me.id)||{},k=myStatus(),t=el('button','mt');t.type='button';t.title='Set your status';
+  const sm=el('small','',p.status_text||(k==='invisible'?'Invisible':ST[k]));sm.style.color=stCol(k)||'var(--muted)';t.append(el('b','',nameOf(me.id)),sm);t.onclick=openStatus;
+  const w=el('button','avw');w.type='button';w.onclick=openStatus;w.append(av(me.id),stDot(me.id));
+  m.append(w,t,ib('gear','Settings',()=>openUserSettings()))}
 
 /* ---- realtime ---- */
-const metaNow=()=>({dev:DEVID,name:L.devName||'',kind:DEV.kind,os:DEV.os,br:DEV.br,pwa:DEV.standalone,vis:document.visibilityState,at:Date.now()});
+const metaNow=()=>({dev:DEVID,name:L.devName||'',kind:DEV.kind,os:DEV.os,br:DEV.br,pwa:DEV.standalone,vis:document.visibilityState,st:myStatus(),at:Date.now()});
 const retrack=debounce(()=>{if(pres)pres.track(metaNow())},300);
 const devRefresh=()=>{if(usHandle&&!usHandle.closed&&usHandle.curTab&&usHandle.curTab()==='devices')usHandle.refresh()};
 function startRealtime(){
   stopRealtime();syncReady=false;
+  dmRt=sb.channel('dm-'+me.id).on('postgres_changes',{event:'*',schema:'public',table:'dms'},async p=>{
+    if(p.eventType==='DELETE'){if(dmWith&&msgs.some(m=>m.id===p.old.id)){msgs=msgs.filter(m=>m.id!==p.old.id);renderMsgs('keep')}return}
+    const m=p.new,peer=m.sender===me.id?m.recipient:m.sender;await loadP([m.sender]);
+    if(dmWith===peer){upsertMsg(nd(m),p.eventType==='INSERT');if(p.eventType==='INSERT')incoming({...nd(m),dm:true})}
+    else if(p.eventType==='INSERT'&&m.recipient===me.id){unread.add(m.sender);renderHomeList();incoming({...nd(m),dm:true});toast('New message from '+nameOf(m.sender))}}).subscribe();
   sync=sb.channel('sync-'+me.id)
     .on('postgres_changes',{event:'*',schema:'public',table:'members'},onMembers)
     .on('postgres_changes',{event:'*',schema:'public',table:'roles'},onRoles)
@@ -637,17 +660,24 @@ function startRealtime(){
     .on('postgres_changes',{event:'*',schema:'public',table:'servers'},onServers)
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'profiles'},onProfile)
     .on('postgres_changes',{event:'*',schema:'public',table:'friendships'},()=>loadFriends())
+    .on('postgres_changes',{event:'*',schema:'public',table:'member_roles'},onRoles)
+    .on('postgres_changes',{event:'*',schema:'public',table:'reactions'},p=>{const r=p.eventType==='DELETE'?p.old:p.new;if(!r||!r.message_id)return;
+      if(p.eventType==='DELETE')delRx(r);else addRx(r);if(!$('chat').hidden&&msgs.some(m=>m.id===r.message_id))renderMsgs('keep')})
     .subscribe(s=>{if(s==='SUBSCRIBED'){if(syncReady)resync();syncReady=true}});
   pres=sb.channel('me0w-presence',{config:{presence:{key:me.id}}})
-    .on('presence',{event:'sync'},()=>{online=new Set(Object.keys(pres.presenceState()));renderMembers();if(!$('home').hidden&&ftab!=='add')renderFriends();devRefresh()})
+    .on('presence',{event:'sync'},()=>{stMap=new Map();const ps=pres.presenceState();
+      Object.keys(ps).forEach(u=>{const act=(ps[u]||[]).filter(x=>x.st!=='invisible');if(!act.length)return;
+        const seen=act.some(x=>x.vis!=='hidden'&&x.st!=='idle');stMap.set(u,act.some(x=>x.st==='dnd')?'dnd':seen?'online':'idle')});
+      online=new Set(stMap.keys());renderMembers();renderHomeList();if(dmWith)setChatHeader();if(!$('home').hidden&&ftab!=='add')renderFriends();devRefresh()})
     .subscribe(async s=>{if(s==='SUBSCRIBED')await pres.track(metaNow())})}
-function stopRealtime(){[sync,pres,chanRt].forEach(c=>{if(c)sb.removeChannel(c)});sync=pres=chanRt=null}
+function stopRealtime(){[sync,pres,chanRt,dmRt].forEach(c=>{if(c)sb.removeChannel(c)});sync=pres=chanRt=dmRt=null}
 const resyncSoon=debounce(()=>resync(),400);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){unreadTitle=0;document.title='me0w'}if(me){retrack();if(!document.hidden)resyncSoon()}});
-addEventListener('online',()=>{if(me)resyncSoon()});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){unreadTitle=0;document.title='me0w';markReadSoon()}if(me){retrack();if(!document.hidden)resyncSoon()}});
+addEventListener('online',()=>{if(me){resyncSoon();pend.filter(p=>p.status==='queued').forEach(sendPending)}});
+addEventListener('offline',()=>toast('You are offline. Messages will send when you are back.'));
 async function resync(){
   if(!me)return;await loadServers();
-  if(cur){if(!cur){return}await loadServerData(cur.id);renderServerUI();if(curCh)await loadMessages(curCh,true)}else loadFriends()}
+  if(cur){if(!cur){return}await loadServerData(cur.id);renderServerUI();if(curCh)await loadMessages(curCh,true)}else{loadFriends();if(dmWith)loadDM(dmWith,true)}}
 const refreshServerData=debounce(async()=>{if(!cur)return;const id=cur.id;if(await loadServerData(id)&&cur&&cur.id===id)renderServerUI()},150);
 function recOf(p){return p.new&&Object.keys(p.new).length?p.new:(p.old||{})}
 function onMembers(p){
@@ -678,7 +708,7 @@ function applyRemote(remote){
   if(curCh)renderMsgs('keep');
   if(usHandle&&!usHandle.closed)usHandle.refresh();
   toast('Theme updated from another device')}
-function onProfile(p){const u=p.new;if(!u)return;
+function onProfile(p){const u=p.new;if(!u)return;if(me&&u.id===me.id)setTimeout(retrack,50);
   if(me&&u.id===me.id&&L.sync&&u.settings&&Object.keys(u.settings).length)applyRemote(u.settings);
   if(!P.has(u.id))return;const {settings,...rest}=u;P.set(u.id,{...P.get(u.id),...rest});refreshNames()}
 
@@ -695,30 +725,30 @@ function pane(p){$('home').hidden=p!=='home';$('chat').hidden=p!=='chat';if(p!==
 function closeNav(){$('app').classList.remove('nav','memopen')}
 function closeChanRt(){if(chanRt){sb.removeChannel(chanRt);chanRt=null}typers.forEach(t=>clearTimeout(t));typers.clear();renderTyping()}
 function setChatHeader(){
+  if(dmWith){$('mTitle').textContent='@ '+nameOf(dmWith);const px=(P.get(dmWith)||{}).status_text;$('mSub').textContent=stLabel(dmWith)+(px?' · '+px:'');$('ci').placeholder='Message @'+nameOf(dmWith);return}
   const c=chans.find(x=>x.id===curCh);
   $('mTitle').textContent=c?'# '+c.name:(cur?'No channels':'');
   $('mSub').textContent=cur?cur.name+' · '+members.length+' member'+(members.length===1?'':'s'):'';
   $('ci').placeholder=c?'Message #'+c.name:'Message'}
 function goHome(){
-  cur=null;curCh=null;msgs=[];members=[];roles=[];chans=[];closeChanRt();renderRail();pane('home');$('mem').innerHTML='';$('mTitle').textContent='Friends';$('mSub').textContent='';
+  cur=null;curCh=null;dmWith=null;msgs=[];members=[];roles=[];chans=[];mroles=new Map();reads=[];closeChanRt();renderRail();pane('home');$('mem').innerHTML='';$('mTitle').textContent='Friends';$('mSub').textContent='';
   $('app').classList.add('home');$('memBtn').hidden=true;
   const t=$('sTitle');t.innerHTML='';const top=el('div','top');top.append(el('b','','Home'));t.append(top);
-  const l=$('chList');l.innerHTML='';const h=el('div','ch-h');h.append(el('span','','Spaces'));l.append(h);
-  const r=el('div','cirow on'),b=el('button','ci');b.append(el('span','hash','♥'),el('span','','Friends'));r.append(b);l.append(r);
-  l.append(el('p','hint','Create a server or join one with an invite code using the + button.'));
-  closeNav();loadFriends()}
+  renderHomeList();closeNav();loadFriends()}
 async function loadServerData(id){
-  const [c,m,r]=await Promise.all([
+  const [c,m,r,mr]=await Promise.all([
     sb.from('channels').select('id,name,created_at').eq('server_id',id).order('created_at'),
     sb.from('members').select('user_id,role_id,joined_at').eq('server_id',id),
-    sb.from('roles').select('*').eq('server_id',id).order('pos',{ascending:false})]);
+    sb.from('roles').select('*').eq('server_id',id).order('pos',{ascending:false}),
+    sb.from('member_roles').select('user_id,role_id').eq('server_id',id)]);
   if(!cur||cur.id!==id)return false;
   if(c.error||m.error||r.error)return false;
   chans=c.data||[];members=m.data||[];roles=r.data||[];
+  mroles=new Map();((mr&&mr.data)||[]).forEach(x=>mroles.set(x.user_id,[...(mroles.get(x.user_id)||[]),x.role_id]));
   await loadP(members.map(x=>x.user_id));return !!cur&&cur.id===id}
 async function selectServer(id){
   const s=servers.find(x=>x.id===id);if(!s)return;
-  cur=s;curCh=null;msgs=[];members=[];roles=[];chans=[];closeChanRt();renderRail();$('mem').innerHTML='';
+  cur=s;curCh=null;dmWith=null;reads=[];mroles=new Map();msgs=[];members=[];roles=[];chans=[];closeChanRt();renderRail();$('mem').innerHTML='';
   $('app').classList.remove('home');$('memBtn').hidden=false;
   if(!await loadServerData(id))return;
   const last=ls.get('me0w-ch-'+id),ch=chans.find(c=>c.id===last)||chans[0];
@@ -729,7 +759,7 @@ function renderServerUI(){
   const t=$('sTitle');t.innerHTML='';const top=el('div','top');top.append(el('b','',cur.name),ib('gear','Server settings',()=>openServerSettings()));t.append(top);
   const iv=el('button','chip');iv.type='button';iv.innerHTML=IC.link;iv.append(document.createTextNode('Invite code: '+cur.invite_code));iv.onclick=()=>copy(cur.invite_code,'Invite code copied');t.append(iv);
   if(curCh&&!chans.some(c=>c.id===curCh)){toast('That channel was removed');const n=chans[0];curCh=null;if(n)selectChannel(n.id)}
-  renderChans();renderMembers();if(!$('chat').hidden)setChatHeader();
+  renderChans();renderMembers();if(!$('chat').hidden){setChatHeader();if(curCh)renderMsgs('keep')}
   if(ssHandle&&!ssHandle.closed)ssHandle.refresh()}
 function renderChans(){
   const l=$('chList');l.innerHTML='';const h=el('div','ch-h');h.append(el('span','','Channels'));
@@ -745,7 +775,7 @@ function renderMembers(){
   roles.slice().sort((a,b)=>b.pos-a.pos).forEach(r=>{const l=members.filter(m=>m.user_id!==cur.owner_id&&m.role_id===r.id&&on(m)).sort(byName);if(l.length)groups.push({name:r.name,color:r.is_default?null:r.color,list:l})});
   const none=members.filter(m=>m.user_id!==cur.owner_id&&!roles.some(r=>r.id===m.role_id)&&on(m));if(none.length)groups.push({name:'Members',color:null,list:none});
   const off=members.filter(m=>!on(m)).sort(byName);
-  const row=(m,isOn)=>{const b=el('button','mrow'+(isOn?'':' off')),w=el('div','avw');b.type='button';w.append(av(m.user_id),el('i','st'+(isOn?' on':'')));
+  const row=(m,isOn)=>{const b=el('button','mrow'+(isOn?'':' off')),w=el('div','avw');b.type='button';w.append(av(m.user_id),stDot(m.user_id));
     const n=el('span','nm',nameOf(m.user_id));n.dataset.nm=m.user_id;const c=roleColor(m.user_id);if(c)n.style.color=c;b.append(w,n);b.onclick=()=>{memberCard(m.user_id);closeNav()};return b};
   groups.forEach(g=>{const h=el('div','ch-h',g.name+' · '+g.list.length);if(g.color)h.style.color=g.color;mm.append(h);g.list.forEach(m=>mm.append(row(m,true)))});
   if(off.length){mm.append(el('div','ch-h','Offline · '+off.length));off.forEach(m=>mm.append(row(m,false)))}
@@ -756,16 +786,21 @@ function memberCard(uid){
   openModal((m,h)=>{
     const p=P.get(uid)||{},ban=el('div','pbanner');ban.style.background='linear-gradient(135deg,'+colorOf(uid)+',var(--accent2))';m.append(ban);
     const pin=el('div','pin'),top=el('div','pc'),t=el('div');top.append(av(uid,'big'));const n=el('h3','',nameOf(uid));n.dataset.nm=uid;t.append(n);
-    const chips=el('div','chips');if(isOwner(uid))chips.append(chip('Owner','#facc15'));else{const r=roleOf(uid);if(r)chips.append(chip(r.name,r.color))}
-    chips.append(chip(online.has(uid)||uid===me.id?'Online':'Offline',online.has(uid)||uid===me.id?'#34d399':null));t.append(chips);top.append(t);pin.append(top);
+    const chips=el('div','chips');
+    const drawChips=()=>{chips.innerHTML='';if(isOwner(uid))chips.append(chip('Owner','#facc15'));
+      rolesOf(uid).filter(r=>!r.is_default).forEach(r=>chips.append(chip(r.name,r.color)));
+      if(can('manage_roles')&&canManage(uid)){const pb=el('button','rchip plus','+');pb.type='button';pb.title='Add or remove roles';pb.onclick=()=>rolePicker(uid,drawChips);chips.append(pb)}
+      chips.append(chip(stLabel(uid),stCol(stOf(uid))))};drawChips();
+    t.append(chips);top.append(t);pin.append(top);
+    if(p.status_text)pin.append(el('p','mp','“'+p.status_text+'”'));
     if(p.bio)pin.append(el('p','mp',p.bio));
     const jm=members.find(x=>x.user_id===uid);if(jm)pin.append(el('p','mp','Joined '+new Date(jm.joined_at).toLocaleDateString([],{year:'numeric',month:'short',day:'numeric'})));
+    if(uid!==me.id){const isF=fr.some(f=>f.status==='accepted'&&(f.requester===uid||f.addressee===uid));
+      pin.append(button(isF?'Message':'Add friend',async()=>{if(isF){h.close();openDM(uid)}else{const {data,error}=await sb.rpc('add_friend',{uname:nameOf(uid)});
+        if(error)toast(error.message);else{toast(data==='accepted'?'You are now friends':'Friend request sent');loadFriends()}}}))}
     if(uid===me.id){pin.append(button('Edit profile',async()=>{h.close();openUserSettings('account')}))}
     if(canManage(uid)){
-      if(can('manage_roles')){pin.append(el('label','lbl','Role'));const sel=el('select','inp');
-        roles.filter(r=>isOwner(me.id)||r.pos<rank(me.id)).forEach(r=>{const o=el('option','',r.name);o.value=r.id;sel.append(o)});
-        const r0=roleOf(uid);if(r0)sel.value=r0.id;
-        sel.onchange=async()=>{const {error}=await sb.rpc('set_member_role',{sid:cur.id,uid,rid:sel.value});if(error){toast(error.message);if(r0)sel.value=r0.id}else toast('Role updated')};pin.append(sel)}
+      
       if(can('kick'))pin.append(button('Remove from server',async()=>{if(await confirmBox({title:'Remove '+nameOf(uid)+'?',text:'They can rejoin with an invite code.',ok:'Remove',danger:true})){
         const {error}=await sb.rpc('kick_member',{sid:cur.id,uid});if(error)toast(error.message);else{toast('Member removed');h.close()}}},'danger'))}
     m.append(pin)},'pcard')}
@@ -787,7 +822,7 @@ function editChannel(c){openModal((m,h)=>{
 /* ---- messages ---- */
 async function selectChannel(cid){
   curCh=cid;if(cur)ls.set('me0w-ch-'+cur.id,cid);
-  msgs=[];hasMore=false;editingId=null;selId=null;away=0;pinned=true;typers.forEach(t=>clearTimeout(t));typers.clear();renderTyping();renderChans();pane('chat');setChatHeader();
+  msgs=[];reads=[];dmWith=null;hasMore=false;editingId=null;selId=null;away=0;pinned=true;typers.forEach(t=>clearTimeout(t));typers.clear();renderTyping();renderChans();pane('chat');setChatHeader();
   openChanRt(cid);await loadMessages(cid,false)}
 async function loadMessages(cid,merge){
   const {data,error}=await sb.from('messages').select(MSG).eq('channel_id',cid).order('id',{ascending:false}).limit(60);
@@ -796,21 +831,135 @@ async function loadMessages(cid,merge){
   const sig=a=>a.map(m=>m.id+':'+(m.edited_at||'')).join();
   if(merge){const oldest=rows.length?rows[0].id:Infinity,next=[...msgs.filter(m=>m.id<oldest),...rows];if(sig(next)===sig(msgs))return;msgs=next;hasMore=data.length===60||hasMore}
   else{msgs=rows;hasMore=data.length===60}
-  renderMsgs('keep',null,!merge)}
+  await Promise.all([loadRx('c',msgs.map(m=>m.id)),loadReads()]);if(curCh!==cid)return;
+  renderMsgs('keep',null,!merge);markReadSoon()}
 async function loadOlder(){
+  if(dmWith)return loadOlderDM();
   if(!msgs.length||!curCh)return;const cid=curCh;
   const {data,error}=await sb.from('messages').select(MSG).eq('channel_id',cid).lt('id',msgs[0].id).order('id',{ascending:false}).limit(60);
   if(curCh!==cid)return;if(error)return toast(error.message);
-  const rows=(data||[]).reverse();await loadP(rows.map(r=>r.user_id));hasMore=(data||[]).length===60;msgs=[...rows,...msgs];renderMsgs('older')}
+  const rows=(data||[]).reverse();await loadP(rows.map(r=>r.user_id));hasMore=(data||[]).length===60;await loadRx('c',rows.map(r=>r.id));msgs=[...rows,...msgs];renderMsgs('older')}
+/* ---- status, DMs, reactions, receipts, roles ---- */
+const myStatus=()=>(P.get(me.id)||{}).status||'online';
+const ST={online:'Online',idle:'Idle',dnd:'Do not disturb',off:'Offline'};
+const stOf=u=>u===me.id?(myStatus()==='invisible'?'off':(stMap.get(u)||myStatus())):(stMap.get(u)||'off');
+const stLabel=u=>ST[stOf(u)];
+const stDot=u=>el('i','st '+(stOf(u)==='off'?'':stOf(u)));
+const stCol=k=>k==='online'?'#34d399':k==='idle'?'#fbbf24':k==='dnd'?'#f43f5e':null;
+function openStatus(){openModal((m,h)=>{
+  m.append(el('h3','','Set your status'));const p=P.get(me.id)||{};let st=p.status||'online';
+  const sg=segCtl([['online','Online'],['idle','Idle'],['dnd','Do not disturb'],['invisible','Invisible']],st,k=>{st=k});sg.style.gridAutoFlow='row';sg.style.gridTemplateColumns='1fr 1fr';m.append(sg);
+  m.append(el('p','mp','Invisible shows you as offline to everyone, but you can still chat.'));
+  const f=field('Custom status','What are you up to?',60);f.i.value=p.status_text||'';m.append(f.w);
+  m.append(button('Save',async()=>{if(await saveProfile({status:st,status_text:f.i.value.trim()||null})){retrack();renderMe();h.close();toast('Status updated')}}))})}
+const DMSEL='id,content,created_at,edited_at,sender,recipient';
+const nd=r=>({id:r.id,content:r.content,created_at:r.created_at,edited_at:r.edited_at,user_id:r.sender,kind:'d'});
+const pairF=u=>'and(sender.eq.'+me.id+',recipient.eq.'+u+'),and(sender.eq.'+u+',recipient.eq.'+me.id+')';
+const ctxKey=()=>dmWith?'d'+dmWith:'c'+curCh;
+const ctxMsgs=()=>[...msgs,...pend.filter(p=>p.ctx===ctxKey())];
+function renderHomeList(){
+  if(cur)return;const l=$('chList');l.innerHTML='';
+  const h=el('div','ch-h');h.append(el('span','','Spaces'));l.append(h);
+  const r=el('div','cirow'+(dmWith?'':' on')),b=el('button','ci');b.type='button';b.append(el('span','hash','♥'),el('span','','Friends'));b.onclick=()=>goHome();r.append(b);l.append(r);
+  l.append(el('div','ch-h','Direct messages'));
+  const ids=fr.filter(f=>f.status==='accepted').map(f=>f.requester===me.id?f.addressee:f.requester).sort((a,b)=>(unread.has(b)?1:0)-(unread.has(a)?1:0)||nameOf(a).localeCompare(nameOf(b)));
+  if(!ids.length)l.append(el('p','hint','Add a friend to start a DM.'));
+  ids.forEach(id=>{const rr=el('div','cirow'+(dmWith===id?' on':'')),bb=el('button','ci'),w=el('div','avw');bb.type='button';w.append(av(id),stDot(id));
+    const n=el('span','',nameOf(id));n.dataset.nm=id;bb.append(w,n);if(unread.has(id))bb.append(el('em','ub'));bb.onclick=()=>{openDM(id);closeNav()};rr.append(bb);l.append(rr)})}
+async function openDM(u){
+  cur=null;curCh=null;dmWith=u;msgs=[];members=[];roles=[];chans=[];mroles=new Map();reads=[];hasMore=false;editingId=null;selId=null;away=0;pinned=true;unread.delete(u);
+  closeChanRt();renderRail();pane('chat');$('mem').innerHTML='';$('app').classList.add('home');$('memBtn').hidden=true;
+  const t=$('sTitle');t.innerHTML='';const top=el('div','top');top.append(el('b','','Home'));t.append(top);renderHomeList();setChatHeader();closeNav();
+  openDmRt(u);await loadDM(u,false)}
+function openDmRt(u){
+  if(chanRt)sb.removeChannel(chanRt);
+  chanRt=sb.channel('d-'+[me.id,u].sort().join('-'),{config:{broadcast:{self:false}}})
+    .on('postgres_changes',{event:'*',schema:'public',table:'reads',filter:'ctx=eq.'+me.id},onRead)
+    .on('broadcast',{event:'typing'},({payload})=>onTyping(payload)).subscribe()}
+async function loadDM(u,merge){
+  const {data,error}=await sb.from('dms').select(DMSEL).or(pairF(u)).order('id',{ascending:false}).limit(60);
+  if(dmWith!==u)return;if(error){toast(error.message);return}
+  const rows=(data||[]).reverse().map(nd);
+  if(merge){const oldest=rows.length?rows[0].id:Infinity;msgs=[...msgs.filter(m=>m.id<oldest),...rows]}else{msgs=rows;hasMore=(data||[]).length===60}
+  await Promise.all([loadRx('d',msgs.map(m=>m.id)),loadReads()]);if(dmWith!==u)return;
+  renderMsgs('keep',null,!merge);markReadSoon()}
+async function loadOlderDM(){
+  const u=dmWith;if(!u||!msgs.length)return;
+  const {data,error}=await sb.from('dms').select(DMSEL).or(pairF(u)).lt('id',msgs[0].id).order('id',{ascending:false}).limit(60);
+  if(dmWith!==u)return;if(error)return toast(error.message);
+  const rows=(data||[]).reverse().map(nd);hasMore=(data||[]).length===60;await loadRx('d',rows.map(r=>r.id));msgs=[...rows,...msgs];renderMsgs('older')}
+/* reactions */
+const rx=new Map(),rxKey=(k,id)=>k+':'+id;
+async function loadRx(kind,ids){if(!ids.length)return;const {data}=await sb.from('reactions').select('kind,message_id,user_id,emoji').eq('kind',kind).in('message_id',ids);(data||[]).forEach(addRx)}
+function addRx(r){const k=rxKey(r.kind,r.message_id),a=rx.get(k)||[];if(!a.some(x=>x.user_id===r.user_id&&x.emoji===r.emoji))a.push({kind:r.kind,message_id:r.message_id,user_id:r.user_id,emoji:r.emoji});rx.set(k,a)}
+function delRx(r){const k=rxKey(r.kind,r.message_id);rx.set(k,(rx.get(k)||[]).filter(x=>!(x.user_id===r.user_id&&x.emoji===r.emoji)))}
+async function toggleRx(m,emoji){
+  const kind=dmWith?'d':'c',mine=(rx.get(rxKey(kind,m.id))||[]).some(x=>x.user_id===me.id&&x.emoji===emoji),row={kind,message_id:m.id,user_id:me.id,emoji};
+  mine?delRx(row):addRx(row);renderMsgs('keep');
+  const {error}=mine?await sb.from('reactions').delete().match({kind,message_id:m.id,user_id:me.id,emoji}):await sb.from('reactions').insert({kind,message_id:m.id,emoji});
+  if(error){toast(error.message);mine?addRx(row):delRx(row);renderMsgs('keep')}}
+function pickReact(m){openModal((mm,h)=>{mm.append(el('h3','','React'));const g=el('div','rpick');
+  EMOJI.forEach(e=>{const b=el('button','',e);b.type='button';b.onclick=()=>{h.close();toggleRx(m,e)};g.append(b)});mm.append(g)})}
+/* read receipts */
+async function loadReads(){
+  let q=sb.from('reads').select('kind,ctx,user_id,last_id,updated_at');
+  q=dmWith?q.eq('kind','d').eq('ctx',me.id).eq('user_id',dmWith):q.eq('kind','c').eq('ctx',curCh);
+  const {data}=await q;reads=(data||[]).filter(r=>r.user_id!==me.id);await loadP(reads.map(r=>r.user_id))}
+function onRead(p){const r=p.new;if(!r||!r.user_id||r.user_id===me.id)return;
+  if((r.kind==='c'&&r.ctx===curCh)||(r.kind==='d'&&dmWith&&r.user_id===dmWith)){reads=reads.filter(x=>x.user_id!==r.user_id);reads.push(r);loadP([r.user_id]);renderMsgs('keep')}}
+const markReadSoon=debounce(async()=>{
+  if(!me||document.hidden||S.receipts===false||(!curCh&&!dmWith)||$('chat').hidden||!msgs.length)return;
+  const id=msgs[msgs.length-1].id,kind=dmWith?'d':'c',ctx=dmWith||curCh,k=kind+ctx;
+  if((lastReadSent.get(k)||0)>=id)return;lastReadSent.set(k,id);
+  await sb.from('reads').upsert({user_id:me.id,kind,ctx,last_id:id,updated_at:new Date().toISOString()},{onConflict:'user_id,kind,ctx'})},900);
+const lastMine=()=>[...msgs].reverse().find(m=>m.user_id===me.id);
+const readers=m=>S.receipts===false?[]:reads.filter(r=>r.user_id!==me.id&&r.last_id>=m.id);
+function seenEl(m){
+  const v=readers(m),b=el('button','mst seen'+(v.length?' on':''));b.type='button';
+  if(dmWith)b.textContent=v.length?'Seen':'Sent';
+  else if(!v.length)b.textContent='Sent';
+  else{b.textContent=v.length<=3?'Seen by '+v.map(x=>nameOf(x.user_id)).join(', '):'Seen by '+v.length;b.onclick=()=>seenModal(v)}
+  return b}
+async function seenModal(v){await loadP(v.map(x=>x.user_id));
+  openModal((m,h)=>{m.append(el('h3','','Seen by '+v.length));
+    v.slice().sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at)).forEach(x=>{
+      const b=el('button','mrow'),w=el('div','avw');b.type='button';w.append(av(x.user_id),stDot(x.user_id));
+      b.append(w,el('span','nm',nameOf(x.user_id)),el('small','tag',hm(x.updated_at)));b.onclick=()=>{h.close();memberCard(x.user_id)};m.append(b)})})}
+function metaRow(g){
+  const last=g.items[g.items.length-1],d=el('div','gmeta');d.append(document.createTextNode(hm(last.created_at)));
+  if(g.uid===me.id){
+    if(last.tmp){const s=el('span','mst '+last.status,last.status==='failed'?'Failed · '+(last.err||'not sent'):last.status==='queued'?'Waiting for connection…':'Sending…');d.append(s);
+      if(last.status==='failed'){const r=el('button','mlink','Retry'),x=el('button','mlink','Delete');r.type=x.type='button';r.onclick=()=>sendPending(last);x.onclick=()=>{pend=pend.filter(p=>p!==last);renderMsgs('keep')};d.append(r,x)}}
+    else{const lm=lastMine();if(lm&&lm.id===last.id)d.append(seenEl(last))}}
+  return d}
+/* role tags */
+function rtag(n,c){const s=el('span','rtag',n);s.style.color=c;s.style.borderColor=c;return s}
+function nameRow(uid,w){const d=el('div','nrow');d.append(w);const tags=[];if(isOwner(uid))tags.push(['Owner','#facc15']);
+  rolesOf(uid).filter(r=>!r.is_default).forEach(r=>tags.push([r.name,r.color]));
+  tags.slice(0,2).forEach(([n,c])=>d.append(rtag(n,c)));if(tags.length>2)d.append(el('span','rtag','+'+(tags.length-2)));return d}
+function rolePicker(uid,done){openModal((m,h)=>{
+  m.append(el('h3','','Roles for '+nameOf(uid)),el('p','mp','Tick the roles this member should have. You can only give roles below your own rank.'));
+  const list=el('div');m.append(list);const own=roles.filter(r=>!r.is_default&&(isOwner(me.id)||r.pos<rank(me.id)));
+  const draw=()=>{list.innerHTML='';if(!own.length)list.append(el('p','mp','No roles available yet. Create some in Server settings, Roles.'));
+    own.forEach(r=>{const on=rolesOf(uid).some(x=>x.id===r.id),row=swRow(r.name,'',on,async v=>{
+      const prev=(mroles.get(uid)||rolesOf(uid).map(x=>x.id)).slice(),next=new Set(prev);v?next.add(r.id):next.delete(r.id);
+      mroles.set(uid,[...next]);renderMembers();renderMsgs('keep');
+      const {error}=await sb.rpc('toggle_member_role',{sid:cur.id,uid,rid:r.id,enable:v});
+      if(error){toast(error.message);mroles.set(uid,prev);renderMembers();renderMsgs('keep');draw()}});
+      row.querySelector('b').style.color=r.color;list.append(row)})};
+  draw();h.onclose=()=>{if(done)done()}})}
+
 function openChanRt(cid){
   if(chanRt)sb.removeChannel(chanRt);
   chanRt=sb.channel('c-'+cid,{config:{broadcast:{self:false}}})
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'channel_id=eq.'+cid},async p=>{await loadP([p.new.user_id]);if(curCh===cid){upsertMsg(p.new,true);incoming(p.new);if(typers.has(p.new.user_id)){clearTimeout(typers.get(p.new.user_id));typers.delete(p.new.user_id);renderTyping()}}})
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'messages',filter:'channel_id=eq.'+cid},p=>{if(curCh===cid)upsertMsg(p.new,false)})
     .on('postgres_changes',{event:'DELETE',schema:'public',table:'messages'},p=>{if(msgs.some(m=>m.id===p.old.id)){msgs=msgs.filter(m=>m.id!==p.old.id);if(editingId===p.old.id)editingId=null;renderMsgs('keep')}})
+    .on('postgres_changes',{event:'*',schema:'public',table:'reads',filter:'ctx=eq.'+cid},onRead)
     .on('broadcast',{event:'typing'},({payload})=>onTyping(payload))
     .subscribe(s=>{if(s==='SUBSCRIBED'&&curCh===cid)loadMessages(cid,true)})}
 function upsertMsg(m,fresh){
+  if(m.user_id===me.id&&fresh){const k=pend.findIndex(p=>p.ctx===ctxKey()&&p.content===m.content&&p.status==='sending');if(k>=0)pend.splice(k,1)}
   const i=msgs.findIndex(x=>x.id===m.id);if(i>=0)msgs[i]={...msgs[i],...m};else{msgs.push(m);msgs.sort((a,b)=>a.id-b.id)}
   renderMsgs('keep',fresh&&i<0?m.id:null)}
 function fmt(text){
@@ -833,13 +982,19 @@ const JUMBO=(()=>{try{return new RegExp('^(?:\\p{Extended_Pictographic}(?:\\u200
 const isJumbo=t=>!!JUMBO&&t.length<=30&&JUMBO.test(t.trim());
 function msgEl(m,first,last,fresh){
   const mine=m.user_id===me.id;
-  const r=el('div','msg'+(first?' first':'')+(last?' last':'')+(fresh?' fresh':'')+(selId===m.id?' sel':''));r.dataset.id=m.id;
+  const r=el('div','msg'+(m.tmp?' pending'+(m.status==='failed'?' failed':''):'')+(first?' first':'')+(last?' last':'')+(fresh?' fresh':'')+(selId===m.id?' sel':''));r.dataset.id=m.id;
   if(editingId===m.id){r.append(editBox(m));return r}
   const b=el('div','bub tx'),f=fmt(m.content);b.append(f.frag);if(m.edited_at)b.append(el('span','edited',' (edited)'));b.title=fullTime(m.created_at);
   if(isJumbo(m.content))r.classList.add('jumbo');
   if(f.mention&&!mine)r.classList.add('mentioned');
   r.append(b);
-  const t=el('div','tools');t.append(ib('copy','Copy text',()=>copy(m.content,'Copied')));
+  if(m.tmp)return r;
+  b.ondblclick=()=>toggleRx(m,'❤️');
+  const rr=rx.get(rxKey(dmWith?'d':'c',m.id))||[];
+  if(rr.length){const by=new Map();rr.forEach(x=>{const e=by.get(x.emoji)||[];e.push(x.user_id);by.set(x.emoji,e)});
+    const row=el('div','rxs');by.forEach((us,e)=>{const c=el('button','rx'+(us.includes(me.id)?' mine':''));c.type='button';c.append(document.createTextNode(e+' '),el('b','',String(us.length)));
+      c.title=us.map(nameOf).join(', ');c.onclick=ev=>{ev.stopPropagation();toggleRx(m,e)};row.append(c)});r.append(row)}
+  const t=el('div','tools');t.append(ib('smile','React',()=>pickReact(m)),ib('copy','Copy text',()=>copy(m.content,'Copied')));
   if(mine)t.append(ib('edit','Edit',()=>startEdit(m)));
   if(mine||can('manage_messages'))t.append(ib('trash','Delete',e=>delMsg(m,e.shiftKey),'danger'));
   r.append(t);
@@ -859,14 +1014,15 @@ function editBox(m){
 async function saveEdit(m){
   const t=editDraft.trim();if(!t)return toast('A message cannot be empty. Use delete instead.');
   if(t===m.content){cancelEdit();return}
-  const {data,error}=await sb.from('messages').update({content:t}).eq('id',m.id).select(MSG).single();
-  if(error)return toast(error.message);editingId=null;upsertMsg(data,false)}
+  const {data,error}=await (dmWith?sb.from('dms').update({content:t}).eq('id',m.id).select(DMSEL).single():sb.from('messages').update({content:t}).eq('id',m.id).select(MSG).single());
+  if(error)return toast(error.message);editingId=null;upsertMsg(dmWith?nd(data):data,false)}
 async function delMsg(m,skip){
   if(!skip&&!await confirmBox({title:'Delete message?',text:m.content.length>140?m.content.slice(0,140)+'…':m.content,ok:'Delete',danger:true}))return;
-  const {data,error}=await sb.from('messages').delete().eq('id',m.id).select('id');
+  const {data,error}=await sb.from(dmWith?'dms':'messages').delete().eq('id',m.id).select('id');
   if(error)return toast(error.message);if(!data||!data.length)return toast('Could not delete that message');
   msgs=msgs.filter(x=>x.id!==m.id);renderMsgs('keep')}
 function updToBottom(){
+  if(pinned)markReadSoon();
   const box=$('msgs'),far=box.scrollHeight-box.scrollTop-box.clientHeight>320,b=$('toBottom');
   b.classList.toggle('off',!far);const old=b.querySelector('b');if(old)old.remove();
   if(far&&away>0)b.append(el('b','',away>9?'9+':String(away)))}
@@ -876,9 +1032,9 @@ function renderMsgs(scroll,freshId,forceBottom){
   const box=$('msgs'),near=box.scrollHeight-box.scrollTop-box.clientHeight<160,prevH=box.scrollHeight,prevT=box.scrollTop;
   box.innerHTML='';
   if(hasMore){const b=el('button','btn ghost sm more','Load older messages');b.type='button';b.onclick=loadOlder;box.append(b)}
-  if(!msgs.length){const e=el('div','empty');e.innerHTML=CAT;e.append(document.createTextNode('This is the start of the channel. Say hi!'));box.append(e)}
+  if(!ctxMsgs().length){const e=el('div','empty');e.innerHTML=CAT;e.append(document.createTextNode('This is the start of the channel. Say hi!'));box.append(e)}
   const flat=S.msgStyle==='clean',groups=[];let prev=null;
-  msgs.forEach(m=>{const d=new Date(m.created_at);let g=groups[groups.length-1];
+  ctxMsgs().forEach(m=>{const d=new Date(m.created_at);let g=groups[groups.length-1];
     const newDay=!prev||!sameDay(new Date(prev.created_at),d);
     if(!g||newDay||g.uid!==m.user_id||d-new Date(prev.created_at)>=300000){
       g={uid:m.user_id,items:[],sep:newDay?(sameDay(d,new Date())?'Today':d.toLocaleDateString([],{weekday:'long',month:'long',day:'numeric'})):null};groups.push(g)}
@@ -888,9 +1044,9 @@ function renderMsgs(scroll,freshId,forceBottom){
     const mine=g.uid===me.id&&!flat,gr=el('div','grp'+(mine?' mine':''));
     if(!mine){const a=av(g.uid);a.onclick=()=>memberCard(g.uid);gr.append(a)}
     const col=el('div','col');
-    if(!mine){const w=el('span','gname',nameOf(g.uid));w.dataset.nm=g.uid;const c=roleColor(g.uid);if(c)w.style.color=c;w.onclick=()=>memberCard(g.uid);col.append(w)}
+    if(!mine){const w=el('span','gname',nameOf(g.uid));w.dataset.nm=g.uid;const c=roleColor(g.uid);if(c)w.style.color=c;w.onclick=()=>memberCard(g.uid);col.append(nameRow(g.uid,w))}
     g.items.forEach((m,i)=>col.append(msgEl(m,i===0,i===g.items.length-1,m.id===freshId)));
-    col.append(el('div','gmeta',hm(g.items[g.items.length-1].created_at)));
+    col.append(metaRow(g));
     gr.append(col);box.append(gr)});
   const mineFresh=freshId&&msgs.some(m=>m.id===freshId&&m.user_id===me.id);
   if(scroll==='older')box.scrollTop=box.scrollHeight-prevH+prevT;
@@ -903,10 +1059,18 @@ const ci=$('ci');
 function autoGrow(){ci.style.height='auto';ci.style.height=Math.min(ci.scrollHeight,150)+'px'}
 const updSend=()=>$('send').classList.toggle('idle',!ci.value.trim());
 async function sendMsg(){
-  const t=ci.value.trim();if(!t||!curCh)return;ci.value='';autoGrow();updSend();
-  const {data,error}=await sb.from('messages').insert({channel_id:curCh,content:t}).select(MSG).single();
-  if(error){toast(error.message);ci.value=t;autoGrow();updSend();return}
-  upsertMsg(data,true)}
+  const t=ci.value.trim();if(!t||(!curCh&&!dmWith))return;ci.value='';autoGrow();updSend();
+  const p={tmp:'t'+(++tmpN),ctx:ctxKey(),content:t,created_at:new Date().toISOString(),user_id:me.id,status:'sending'};
+  pend.push(p);renderMsgs('keep',p.tmp,true);sendPending(p)}
+async function sendPending(p){
+  if(!navigator.onLine){p.status='queued';renderMsgs('keep');return}
+  p.status='sending';p.err='';renderMsgs('keep');
+  const dm=p.ctx[0]==='d',id=p.ctx.slice(1);
+  const q=dm?sb.from('dms').insert({recipient:id,content:p.content}).select(DMSEL).single():sb.from('messages').insert({channel_id:id,content:p.content}).select(MSG).single();
+  let r;try{r=await Promise.race([q,new Promise(res=>setTimeout(()=>res({error:{message:'Timed out. Check your connection.'}}),15000))])}catch(e){r={error:{message:'Network error'}}}
+  if(!pend.includes(p))return;
+  if(r.error){p.status='failed';p.err=r.error.message;renderMsgs('keep');return}
+  pend=pend.filter(x=>x!==p);if(p.ctx===ctxKey())upsertMsg(dm?nd(r.data):r.data,true)}
 $('cf').onsubmit=e=>{e.preventDefault();sendMsg()};
 $('send').addEventListener('mousedown',e=>e.preventDefault());
 ci.oninput=()=>{autoGrow();updSend();typed()};
@@ -939,10 +1103,10 @@ $('addSrv').onclick=()=>openModal((m,h)=>{
 /* ---- friends ---- */
 async function loadFriends(){
   if(!me)return;const {data}=await sb.from('friendships').select('id,requester,addressee,status').or('requester.eq.'+me.id+',addressee.eq.'+me.id);
-  fr=data||[];await loadP(fr.flatMap(f=>[f.requester,f.addressee]));renderFriends()}
+  fr=data||[];await loadP(fr.flatMap(f=>[f.requester,f.addressee]));renderFriends();renderHomeList()}
 document.querySelectorAll('.ftabs button').forEach(b=>b.onclick=()=>{ftab=b.dataset.t;renderFriends()});
-function frow(id,right){const r=el('div','row'),w=el('div','avw'),isOn=online.has(id);w.append(av(id),el('i','st'+(isOn?' on':'')));
-  const n=el('div','nm'),sp=el('span','',nameOf(id));sp.dataset.nm=id;n.append(sp,el('small','',isOn?'Online':'Offline'));r.append(w,n);right.forEach(x=>r.append(x));return r}
+function frow(id,right){const r=el('div','row'),w=el('div','avw'),isOn=online.has(id);w.append(av(id),stDot(id));
+  const n=el('div','nm'),sp=el('span','',nameOf(id));sp.dataset.nm=id;n.append(sp,el('small','',stLabel(id)+((P.get(id)||{}).status_text?' · '+P.get(id).status_text:'')));r.append(w,n);right.forEach(x=>r.append(x));return r}
 function emptyState(text){const e=el('div','empty');e.innerHTML=CAT;e.append(document.createTextNode(text));return e}
 function renderFriends(){
   const body=$('fbody'),other=f=>f.requester===me.id?f.addressee:f.requester;
@@ -953,7 +1117,7 @@ function renderFriends(){
   body.innerHTML='';
   const del=(f,t)=>button(t,async()=>{const {error}=await sb.from('friendships').delete().eq('id',f.id);if(error)toast(error.message);else loadFriends()},'ghost sm');
   if(ftab==='all'){if(!ok.length)body.append(emptyState('No friends yet. Use Add friend to send a request.'));
-    ok.sort((a,b)=>(online.has(other(b))?1:0)-(online.has(other(a))?1:0)).forEach(f=>body.append(frow(other(f),[del(f,'Remove')])))}
+    ok.sort((a,b)=>(online.has(other(b))?1:0)-(online.has(other(a))?1:0)).forEach(f=>body.append(frow(other(f),[button('Message',()=>openDM(other(f)),'sm'),del(f,'Remove')])))}
   if(ftab==='pending'){if(!inc.length&&!out.length)body.append(emptyState('No pending requests.'));
     inc.forEach(f=>body.append(frow(f.requester,[button('Accept',async()=>{const {error}=await sb.from('friendships').update({status:'accepted'}).eq('id',f.id);if(error)toast(error.message);else loadFriends()},'sm'),del(f,'Decline')])));
     out.forEach(f=>body.append(frow(f.addressee,[el('small','tag','Sent'),del(f,'Cancel')])))}
@@ -965,7 +1129,7 @@ function renderFriends(){
 /* ================= user settings ================= */
 const AV_COLORS=['#ef4444','#f97316','#f59e0b','#22c55e','#14b8a6','#3b82f6','#6366f1','#8b5cf6','#ec4899','#64748b'];
 async function saveProfile(patch){
-  const {data,error}=await sb.from('profiles').update(patch).eq('id',me.id).select('id,username,color,bio').single();
+  const {data,error}=await sb.from('profiles').update(patch).eq('id',me.id).select('id,username,color,bio,status,status_text').single();
   if(error){toast(error.code==='23505'?'That username is taken':error.code==='23514'?'Invalid value (username: 3 to 20 letters, numbers, _ or .)':error.message);return false}
   P.set(me.id,{...P.get(me.id),...data});refreshNames();return true}
 async function confirmLogout(){
@@ -1041,6 +1205,7 @@ function chatTab(c){
   c.append(el('div','lbl','Message style'));
   c.append(segCtl([['bubble','Bubbles'],['clean','Clean']],S.msgStyle,k=>{setS({msgStyle:k});if(curCh)renderMsgs('keep')}));
   c.append(el('p','hint','Bubbles put your messages on the right. Clean lines everyone up on the left, with no bubbles.'));
+  c.append(swRow('Read receipts','Let others see when you have read their messages. If off, you will not see theirs either.',S.receipts!==false,v=>setS({receipts:v})));
   c.append(swRow('24-hour time','Show 18:30 instead of 6:30 PM',S.h24,v=>{setS({h24:v});if(curCh)renderMsgs('keep')}));
   c.append(swRow('Enter sends the message','Turn off to type new lines with Enter and send with the arrow button. Applies to this device only.',L.enterSend,v=>{L.enterSend=v;saveL()}));
   c.append(el('p','hint','Tip: tap a message to copy, edit or delete it. Type @name to mention someone, **bold**, *italic*, `code` or ``` for code blocks.'))}
@@ -1153,9 +1318,8 @@ function ssMembers(c){
   [...members].sort((a,b)=>rank(b.user_id)-rank(a.user_id)||nameOf(a.user_id).localeCompare(nameOf(b.user_id))).forEach(m=>{
     const u=m.user_id,r=el('div','row'),n=el('div','nm'),sp=el('span','',nameOf(u));sp.dataset.nm=u;const col=roleColor(u);if(col)sp.style.color=col;n.append(sp);r.append(av(u),n);
     if(isOwner(u))r.append(chip('Owner','#facc15'));
-    else if(canManage(u)&&can('manage_roles')){const sel=el('select','inp');sel.style.width='auto';sel.style.maxWidth='40%';
-      roles.filter(x=>isOwner(me.id)||x.pos<rank(me.id)).forEach(x=>{const o=el('option','',x.name);o.value=x.id;sel.append(o)});const r0=roleOf(u);if(r0)sel.value=r0.id;
-      sel.onchange=async()=>{const {error}=await sb.rpc('set_member_role',{sid:cur.id,uid:u,rid:sel.value});if(error){toast(error.message);if(r0)sel.value=r0.id}else toast('Role updated')};r.append(sel)}
+    else if(canManage(u)&&can('manage_roles')){rolesOf(u).filter(x=>!x.is_default).forEach(x=>r.append(chip(x.name,x.color)));
+      const pb=el('button','btn ghost sm','+ Roles');pb.type='button';pb.onclick=()=>rolePicker(u);r.append(pb)}
     else{const ro=roleOf(u);if(ro)r.append(chip(ro.name,ro.color))}
     if(canManage(u)&&can('kick'))r.append(ib('x','Remove',async()=>{if(await confirmBox({title:'Remove '+nameOf(u)+'?',text:'They can rejoin with an invite code.',ok:'Remove',danger:true})){
       const {error}=await sb.rpc('kick_member',{sid:cur.id,uid:u});if(error)toast(error.message);else toast('Member removed')}},'danger'));
