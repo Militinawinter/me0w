@@ -220,6 +220,9 @@ select.inp{padding:10px 12px;appearance:auto}
 .mem .hint{padding:0 8px}
 .mem .mhd{font-family:var(--disp);font-weight:700;font-size:1.1rem;padding:12px 8px 2px}
 .mem .ch-h{padding:14px 8px 4px}
+.memhd{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-right:4px}
+.memhd .mhd{padding:12px 8px 2px}
+.mem .memx{display:none;width:38px;height:38px;border-radius:12px}
 .mrow{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:calc(var(--r1) + 4px);width:100%;text-align:left;transition:.2s}
 .mrow:hover{background:var(--hover)}.mrow.off{opacity:.45}.mrow:hover.off{opacity:.8}
 .mrow .av{width:32px;height:32px;font-size:.78rem}.mrow .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.92rem;font-weight:600}
@@ -300,6 +303,10 @@ select.inp{padding:10px 12px;appearance:auto}
 .rxs{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.grp.mine .rxs{justify-content:flex-end}
 .rx{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-size:.84rem}
 .rx b{font-size:.74rem;font-weight:600;color:var(--muted)}.rx.mine{background:var(--accent-soft);border-color:var(--accent-text)}.rx.mine b{color:var(--text)}
+@keyframes rxpop{0%{transform:scale(.4)}55%{transform:scale(1.2)}100%{transform:scale(1)}}
+.rx.pop{animation:rxpop .42s var(--spring)}
+@keyframes rxburst{0%{opacity:0;transform:translate(-50%,-40%) scale(.3)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-190%) scale(1.6)}}
+.rxburst{position:fixed;z-index:1200;font-size:2.2rem;line-height:1;pointer-events:none;animation:rxburst .95s var(--ease) forwards}
 .rpick{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;margin-top:10px}.rpick button{font-size:1.5rem;height:44px;border-radius:12px}.rpick button:hover{background:var(--hover)}
 .mst{margin-left:8px;font-size:.69rem}.mst.failed{color:#fb7185}.mst.seen{color:var(--muted)}.mst.seen.on{color:var(--accent-text);font-weight:600}button.mst.seen.on{cursor:pointer}
 .mlink{color:var(--accent-text);font-size:.69rem;margin-left:8px;font-weight:600}
@@ -312,9 +319,10 @@ select.inp{padding:10px 12px;appearance:auto}
 @media(max-width:1120px){
   #app,#app.nomem,#app.home{grid-template-columns:76px 252px minmax(0,1fr)}
   #app.nomem .mem{display:flex}
-  .mem{position:fixed;right:10px;top:calc(10px + env(safe-area-inset-top,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));width:min(300px,86vw);z-index:50;transform:translateX(110%);transition:transform .5s var(--spring);background:var(--sheet)}
+  .mem{position:fixed;right:10px;top:calc(10px + env(safe-area-inset-top,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));width:min(320px,86vw);z-index:50;transform:translateX(110%);transition:transform .5s var(--spring);background:var(--sheet)}
   #app.memopen .mem{transform:none}
   #app.memopen .scrim{opacity:1;pointer-events:auto}
+  .mem .memx{display:grid}
 }
 /* ---------- phone ---------- */
 @media(max-width:760px){
@@ -330,7 +338,7 @@ select.inp{padding:10px 12px;appearance:auto}
   .drawer .dock{width:68px;flex:none}.drawer .side{flex:1}
   #app.nav .drawer{transform:none}
   #app.nav .scrim{opacity:1;pointer-events:auto}
-  .mem{top:calc(8px + env(safe-area-inset-top,0px));right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:min(330px,90vw)}
+  .mem{top:calc(8px + env(safe-area-inset-top,0px));right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:min(320px,84vw)}
   .cirow .ib{opacity:.7}
   .ov{place-items:end center;padding:0}
   .mc{width:100%;border-radius:var(--r3) var(--r3) 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));max-height:calc(var(--vh) - 32px);transform:translateY(100%)}
@@ -451,6 +459,14 @@ input,textarea{cursor:text}
 .cbtn.on{background:var(--accent-bg);color:var(--on-accent)}
 .cbtn.end{background:#e11d48;color:#fff}
 .cbtn.big{width:58px;height:58px}
+.cbtn.mini{width:38px;height:38px;margin-left:auto}.cbtn.mini svg{width:18px;height:18px}
+.callchip{display:flex;align-items:center;gap:7px;height:38px;padding:0 13px;border-radius:99px;background:var(--accent-bg);color:var(--on-accent);font-size:.82rem;font-weight:700;max-width:230px;overflow:hidden;white-space:nowrap;box-shadow:0 8px 20px -8px var(--accent);transition:transform .3s var(--spring);flex:none}
+.callchip span:last-child{overflow:hidden;text-overflow:ellipsis}
+.callchip:active{transform:scale(.94)}
+.callchip.incoming{background:#e11d48;color:#fff}
+.callchip .cd{width:8px;height:8px;border-radius:50%;background:currentColor;animation:cdpulse 1.4s ease-in-out infinite;flex:none}
+@keyframes cdpulse{50%{opacity:.3;transform:scale(1.35)}}
+.callchip svg{width:15px;height:15px;flex:none}
 .ring::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:2px solid var(--accent);animation:ringp 1.5s infinite}
 @keyframes ringp{to{transform:scale(1.45);opacity:0}}
 
@@ -553,6 +569,7 @@ input,textarea{cursor:text}
     <header class="mh panel">
       <button class="ib burger" id="burger" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h16"/></svg></button>
       <div class="mt2"><b id="mTitle"></b><small id="mSub"></small></div>
+      <button type="button" class="callchip" id="callChip" hidden></button>
       <button class="ib" id="memBtn" title="Members" aria-label="Members" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></button>
     </header>
     <section class="pane" id="home">
@@ -982,7 +999,7 @@ function startRealtime(){
       if(p.eventType==='DELETE')delRx(r);else addRx(r);if(!$('chat').hidden&&msgs.some(m=>m.id===r.message_id))renderMsgs('keep')})
     .on('postgres_changes',{event:'*',schema:'public',table:'announcements'},p=>{if(p.eventType==='INSERT')showAnnouncement(p.new)})
     .on('postgres_changes',{event:'*',schema:'public',table:'bans'},p=>{const b=p.eventType==='DELETE'?p.old:p.new;if(b&&b.user_id===me.id){if(p.eventType==='DELETE')$('banwall').classList.remove('on');else checkBan()}})
-    .subscribe(s=>{if(s==='SUBSCRIBED'){if(syncReady)resync();syncReady=true;loadAnnouncements()}});
+    .subscribe(s=>{if(s==='SUBSCRIBED'){if(syncReady)resync();syncReady=true}});
   pres=sb.channel('me0w-presence',{config:{presence:{key:me.id}}})
     .on('presence',{event:'sync'},()=>{stMap=new Map();const ps=pres.presenceState();
       Object.keys(ps).forEach(u=>{const act=(ps[u]||[]).filter(x=>x.st!=='invisible');if(!act.length)return;
@@ -1088,7 +1105,9 @@ function renderChans(){
 function renderMembers(){
   const memEl=$('mem');memEl.innerHTML='';if(!cur)return;const mm=el('div','mscroll');
   const on=m=>online.has(m.user_id)||m.user_id===me.id,byName=(a,b)=>nameOf(a.user_id).localeCompare(nameOf(b.user_id));
-  const nOn=members.filter(on).length;mm.append(el('div','mhd','Members'),el('div','hint',nOn+' online · '+members.length+' total'));
+  const nOn=members.filter(on).length;const hd=el('div','memhd');hd.append(el('div','mhd','Members'));
+  const xb=el('button','ib memx');xb.type='button';xb.title='Close';xb.setAttribute('aria-label','Close members');xb.innerHTML=IC.x;xb.onclick=()=>closeNav();hd.append(xb);
+  mm.append(hd,el('div','hint',nOn+' online · '+members.length+' total'));
   const groups=[];
   const ownerM=members.filter(m=>m.user_id===cur.owner_id&&on(m));if(ownerM.length)groups.push({name:'Owner',color:'#facc15',list:ownerM});
   roles.slice().sort((a,b)=>b.pos-a.pos).forEach(r=>{const l=members.filter(m=>m.user_id!==cur.owner_id&&m.role_id===r.id&&on(m)).sort(byName);if(l.length)groups.push({name:r.name,color:r.is_default?null:r.color,list:l})});
@@ -1236,8 +1255,16 @@ function delRx(r){const k=rxKey(r.kind,r.message_id);rx.set(k,(rx.get(k)||[]).fi
 async function toggleRx(m,emoji){
   const kind=dmWith?'d':'c',mine=(rx.get(rxKey(kind,m.id))||[]).some(x=>x.user_id===me.id&&x.emoji===emoji),row={kind,message_id:m.id,user_id:me.id,emoji};
   mine?delRx(row):addRx(row);renderMsgs('keep');
+  if(!mine)reactBurst(m,emoji);
   const {error}=mine?await sb.from('reactions').delete().match({kind,message_id:m.id,user_id:me.id,emoji}):await sb.from('reactions').insert({kind,message_id:m.id,emoji});
   if(error){toast(error.message);mine?addRx(row):delRx(row);renderMsgs('keep')}}
+function reactBurst(m,emoji){
+  try{const node=document.querySelector('.msg[data-id="'+(window.CSS&&CSS.escape?CSS.escape(String(m.id)):String(m.id))+'"]');if(!node)return;
+    const r=node.getBoundingClientRect(),s=el('span','rxburst',emoji);
+    s.style.left=(r.left+Math.min(r.width-16,54))+'px';s.style.top=(r.top+18)+'px';document.body.append(s);
+    setTimeout(()=>s.remove(),1000);
+    requestAnimationFrame(()=>{const p=node.querySelector('.rx.mine');if(p){p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}});
+  }catch(e){}}
 function pickReact(m){openModal((mm,h)=>{mm.append(el('h3','','React'));const g=el('div','rpick');
   EMOJI.forEach(e=>{const b=el('button','',e);b.type='button';b.onclick=()=>{h.close();toggleRx(m,e)};g.append(b)});mm.append(g)})}
 /* read receipts */
@@ -1310,6 +1337,22 @@ const pairId=uid=>[me.id,uid].sort().join('-');
 function cbtn(icon,title,fn,cls){const b=el('button','cbtn'+(cls?' '+cls:''));b.type='button';b.innerHTML=IC[icon]||'';b.title=title;b.setAttribute('aria-label',title);b.onclick=e=>{e.stopPropagation();fn()};return b}
 function sendCall(payload){const c=callState&&callState.chan;if(!c)return;try{c.send({type:'broadcast',event:'call',payload})}catch(e){}}
 function fmtClock(ms){const s=Math.max(0,Math.floor(ms/1000)),m=Math.floor(s/60);return String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function tone(f1,f2,dur,type,vol){try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f1,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.09,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+dur+.03)}catch(e){}}
+const sndRingOut=()=>{if(L.sound)tone(440,480,.5,'sine',.055)};
+const sndRingIn=()=>{if(!L.sound)return;tone(880,880,.16,'triangle',.085);setTimeout(()=>tone(660,660,.22,'triangle',.085),210)};
+const sndConnect=()=>{if(!L.sound)return;tone(660,990,.16,'sine',.09);setTimeout(()=>tone(990,1320,.2,'sine',.075),140)};
+const sndEnd=()=>{if(!L.sound)return;tone(540,260,.3,'sine',.075)};
+function stopRingback(){if(callState){clearInterval(callState.ringTimer);callState.ringTimer=null}}
+function updateCallChip(){
+  const chip=$('callChip');if(!chip)return;
+  if(incomingCall){chip.hidden=false;chip.classList.add('incoming');chip.innerHTML='<span class="cd"></span><span>'+nameOf(incomingCall.from)+' is calling…</span>';chip.onclick=()=>{const o=$('incall');if(o&&o.classList.contains('on'))return;showIncoming(incomingCall)};return}
+  chip.classList.remove('incoming');
+  if(!callState){chip.hidden=true;chip.innerHTML='';chip.onclick=null;return}
+  chip.hidden=false;const t=callState.timerEl?callState.timerEl.textContent:fmtClock(Date.now()-callState.started);
+  chip.innerHTML=(callState.micOn?IC.phone:IC.micOff)+'<span class="cd"></span><span>'+nameOf(callState.peer)+' · '+t+'</span>';
+  chip.onclick=()=>restoreCall()}
+function minimizeCall(){if(callState){$('call').classList.remove('on');updateCallChip()}}
+function restoreCall(){if(callState){$('call').classList.add('on');updateCallChip()}}
 function startRing(){if(ringRt)return ringRt;ringRt=sb.channel(callTopic(me.id),{config:{broadcast:{self:false}}}).on('broadcast',{event:'call'},({payload})=>onCall(payload)).subscribe();return ringRt}
 async function getMedia(mode){
   if(mode==='screen'){const s=await navigator.mediaDevices.getDisplayMedia({video:true,audio:false});try{const a=await navigator.mediaDevices.getUserMedia({audio:true});a.getAudioTracks().forEach(t=>s.addTrack(t))}catch(e){}return s}
@@ -1322,24 +1365,26 @@ async function startCall(uid,mode){
   const topic=callTopic(uid),id=pairId(uid);
   const chan=sb.channel(topic,{config:{broadcast:{self:false}}});
   chan.on('broadcast',{event:'call'},({payload})=>onCall(payload));
-  callState={peer:uid,mode,callId:id,stream,micOn:true,camOn:mode==='video',share:mode==='screen',chan,topic,role:'caller',pendingIce:[],remote:null,started:Date.now()};
+  callState={peer:uid,mode,callId:id,stream,micOn:true,camOn:mode==='video',share:mode==='screen',chan,topic,role:'caller',pendingIce:[],remote:null,connected:false,started:Date.now()};
   openCallUI('Calling '+nameOf(uid)+'…');
+  sndRingOut();callState.ringTimer=setInterval(sndRingOut,3000);
   chan.subscribe(st=>{if(st==='SUBSCRIBED')chan.send({type:'broadcast',event:'call',payload:{call:id,from:me.id,to:uid,type:'ring',mode}})});
   callState.ringTimeout=setTimeout(()=>{if(callState&&callState.role==='caller'&&!callState.remote){toast(nameOf(uid)+' did not answer');endCall()}},45000);
 }
 async function acceptCall(){
   const inc=incomingCall;if(!inc)return;incomingCall=null;closeIncomingUI();
   let stream;try{stream=await getMedia(inc.mode)}catch(e){inc.reply({call:inc.call,from:me.id,to:inc.from,type:'reply',accept:false});return toast('Could not start the call')}
-  callState={peer:inc.from,mode:inc.mode,callId:inc.call,stream,micOn:true,camOn:inc.mode==='video',share:inc.mode==='screen',chan:ringRt,topic:callTopic(me.id),role:'callee',pendingIce:[],remote:null,started:Date.now()};
+  callState={peer:inc.from,mode:inc.mode,callId:inc.call,stream,micOn:true,camOn:inc.mode==='video',share:inc.mode==='screen',chan:ringRt,topic:callTopic(me.id),role:'callee',pendingIce:[],remote:null,connected:false,started:Date.now()};
   openCallUI('In call with '+nameOf(inc.from));
   inc.reply({call:inc.call,from:me.id,to:inc.from,type:'reply',accept:true});
+  updateCallChip();
 }
 function declineCall(){const inc=incomingCall;if(!inc)return;incomingCall=null;inc.reply({call:inc.call,from:me.id,to:inc.from,type:'reply',accept:false});closeIncomingUI()}
 async function onCall(p){
   if(!p)return;
   if(p.type==='ring'){if(p.to!==me.id)return;if(callState){try{ringRt&&ringRt.send({type:'broadcast',event:'call',payload:{call:p.call,from:me.id,to:p.from,type:'reply',accept:false,busy:true}})}catch(e){}return}showIncoming(p);return}
   if(!callState||p.call!==callState.callId||p.from!==callState.peer)return;
-  if(p.type==='reply'){if(!p.accept){toast(nameOf(p.from)+(p.busy?' is busy':' declined the call'));endCall();return}if(callState.role==='caller')makeOffer();return}
+  if(p.type==='reply'){if(!p.accept){stopRingback();toast(nameOf(p.from)+(p.busy?' is busy':' declined the call'));endCall();return}stopRingback();if(callState.role==='caller')makeOffer();return}
   if(p.type==='offer'){if(callState.role==='callee')makeAnswer(p.sdp);return}
   if(p.type==='answer'){if(callState.role==='caller'&&callState.pc){await callState.pc.setRemoteDescription(p.sdp);callState.remote=true;flushIce();clearTimeout(callState.ringTimeout);clearMsg();uCallHead('In call with '+nameOf(p.from))}return}
   if(p.type==='ice'){addRemoteIce(p.cand);return}
@@ -1348,7 +1393,7 @@ async function onCall(p){
 function buildPC(){
   const pc=new RTCPeerConnection(PCICE);
   pc.onicecandidate=e=>{if(e.candidate)sendCall({call:callState.callId,from:me.id,to:callState.peer,type:'ice',cand:e.candidate})};
-  pc.ontrack=e=>{const s=e.streams[0];if(s&&callState){callState.remote=true;if(callState.remoteVideo){callState.remoteVideo.srcObject=s;callState.remoteVideo.play().catch(()=>{})}clearMsg();uCallHead('In call with '+nameOf(callState.peer));clearTimeout(callState.ringTimeout)}};
+  pc.ontrack=e=>{const s=e.streams[0];if(s&&callState){callState.remote=true;if(callState.remoteVideo){callState.remoteVideo.srcObject=s;callState.remoteVideo.play().catch(()=>{})}clearMsg();uCallHead('In call with '+nameOf(callState.peer));clearTimeout(callState.ringTimeout);stopRingback();if(!callState.connected){callState.connected=true;sndConnect()}updateCallChip()}};
   pc.onconnectionstatechange=()=>{if(pc.connectionState==='failed'&&callState){toast('Call connection lost');endCall()}};
   callState.stream.getTracks().forEach(t=>pc.addTrack(t,callState.stream));
   callState.pc=pc;return pc;
@@ -1359,7 +1404,8 @@ function addRemoteIce(c){if(!callState||!c)return;if(callState.pc&&callState.pc.
 function flushIce(){if(!callState)return;const q=callState.pendingIce||[];callState.pendingIce=[];q.forEach(c=>{try{callState.pc.addIceCandidate(c).catch(()=>{})}catch(e){}})}
 function openCallUI(title){
   const c=$('call');c.innerHTML='';c.classList.add('on');const box=el('div','callbox');
-  const head=el('div','callhead');head.append(av(callState.peer,'sm'));const info=el('div');callState.titleEl=el('b','',title);callState.timerEl=el('small','','00:00');info.append(callState.titleEl,callState.timerEl);head.append(info);box.append(head);
+  const head=el('div','callhead');head.append(av(callState.peer,'sm'));const info=el('div');callState.titleEl=el('b','',title);callState.timerEl=el('small','','00:00');info.append(callState.titleEl,callState.timerEl);head.append(info);
+  const mini=el('button','cbtn mini');mini.type='button';mini.title='Minimize';mini.setAttribute('aria-label','Minimize');mini.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';mini.onclick=e=>{e.stopPropagation();minimizeCall()};head.append(mini);box.append(head);
   const stage=el('div','callstage');const rv=el('video');rv.autoplay=true;rv.playsInline=true;rv.setAttribute('playsinline','');stage.append(rv);callState.remoteVideo=rv;
   callState.msgEl=el('div','callmsg',callState.mode==='screen'?'Sharing your screen…':'Connecting…');stage.append(callState.msgEl);
   const pip=el('div','pip');const lv=el('video');lv.autoplay=true;lv.muted=true;lv.playsInline=true;lv.setAttribute('playsinline','');lv.srcObject=callState.stream;pip.append(lv);if(callState.mode==='audio')pip.style.display='none';stage.append(pip);callState.localVideo=lv;callState.pip=pip;box.append(stage);
@@ -1369,11 +1415,11 @@ function openCallUI(title){
   callState.shareBtn=cbtn('screen','Share your screen',()=>toggleShare());
   const end=cbtn('hangup','End call',()=>endCall(),'end');end.classList.add('big');
   ctl.append(callState.micBtn,callState.camBtn,callState.shareBtn,end);box.append(ctl);c.append(box);
-  clearInterval(callState.tick);callState.tick=setInterval(()=>{if(callState&&callState.timerEl)callState.timerEl.textContent=fmtClock(Date.now()-callState.started)},500);
+  clearInterval(callState.tick);callState.tick=setInterval(()=>{if(callState&&callState.timerEl)callState.timerEl.textContent=fmtClock(Date.now()-callState.started);updateCallChip()},500);updateCallChip();
 }
 function uCallHead(t){if(callState&&callState.titleEl)callState.titleEl.textContent=t}
 function clearMsg(){if(callState&&callState.msgEl)callState.msgEl.remove()}
-function toggleMic(){if(!callState)return;callState.micOn=!callState.micOn;callState.stream.getAudioTracks().forEach(t=>t.enabled=callState.micOn);callState.micBtn.classList.toggle('on',!callState.micOn);callState.micBtn.innerHTML=IC[callState.micOn?'mic':'micOff']}
+function toggleMic(){if(!callState)return;callState.micOn=!callState.micOn;callState.stream.getAudioTracks().forEach(t=>t.enabled=callState.micOn);callState.micBtn.classList.toggle('on',!callState.micOn);callState.micBtn.innerHTML=IC[callState.micOn?'mic':'micOff'];updateCallChip()}
 async function toggleCam(){
   if(!callState)return;
   let vt=callState.stream.getVideoTracks()[0];
@@ -1398,11 +1444,11 @@ async function toggleShare(){
 function endCall(sendBye){
   if(!callState)return;const c=callState;
   if(sendBye!==false)try{sendCall({call:c.callId,from:me.id,to:c.peer,type:'bye'})}catch(e){}
-  clearTimeout(c.ringTimeout);clearInterval(c.tick);
+  clearTimeout(c.ringTimeout);clearInterval(c.tick);clearInterval(c.ringTimer);
   try{c.stream.getTracks().forEach(t=>t.stop())}catch(e){}try{c.shareTrack&&c.shareTrack.stop()}catch(e){}
   try{c.pc&&c.pc.close()}catch(e){}
   if(c.chan&&c.chan!==ringRt)sb.removeChannel(c.chan);
-  callState=null;$('call').classList.remove('on');$('call').innerHTML='';
+  callState=null;$('call').classList.remove('on');$('call').innerHTML='';sndEnd();updateCallChip();
 }
 function showIncoming(p){
   incomingCall={call:p.call,from:p.from,mode:p.mode,reply:payload=>{try{ringRt.send({type:'broadcast',event:'call',payload})}catch(e){}}};
@@ -1413,10 +1459,10 @@ function showIncoming(p){
   const row=el('div','mrow2');const dec=el('button','btn danger','Decline'),acc=el('button','btn','Accept');dec.type=acc.type='button';
   dec.onclick=()=>declineCall();acc.onclick=()=>acceptCall();row.append(dec,acc);mc.append(row);
   document.body.append(ov);ov.onmousedown=e=>{if(e.target===ov)declineCall()};
-  let n=0;const ring=setInterval(()=>{if(!incomingCall){clearInterval(ring);return}if(L.sound)blip();if(++n>60)declineCall()},2200);if(L.sound)blip();
+  let n=0;const ring=setInterval(()=>{if(!incomingCall){clearInterval(ring);return}sndRingIn();if(++n>60)declineCall()},2400);sndRingIn();updateCallChip();
   incomingCall.stop=()=>clearInterval(ring);
 }
-function closeIncomingUI(){if(incomingCall&&incomingCall.stop)incomingCall.stop();const o=$('incall');if(o)o.remove()}
+function closeIncomingUI(){if(incomingCall&&incomingCall.stop)incomingCall.stop();const o=$('incall');if(o)o.remove();updateCallChip()}
 
 /* ================= bans (admin) ================= */
 const BAN_MULT={seconds:1,minutes:60,hours:3600,days:86400,weeks:604800,months:2592000,years:31536000};
@@ -1487,8 +1533,12 @@ document.addEventListener('contextmenu',e=>{
 });
 
 /* ================= announcements (admin -> everyone) ================= */
+const annSeen=(()=>{try{return new Set(JSON.parse(ls.get('me0w-annseen')||'[]'))}catch(e){return new Set()}})();
+function markAnnSeen(id){annSeen.add(String(id));try{ls.set('me0w-annseen',JSON.stringify([...annSeen].slice(-200)))}catch(e){}}
 function showAnnouncement(row){
-  if(!row||!row.body)return;const w=$('annwrap');if(!w)return;
+  if(!row||!row.body)return;
+  if(row.id!=null){const k=String(row.id);if(annSeen.has(k))return;markAnnSeen(k)}
+  const w=$('annwrap');if(!w)return;
   const b=el('div','annb '+(row.level||'info'));
   b.append(el('span','adot'));const tx=el('div','atx');tx.append(el('b','','Announcement'),el('div','',row.body));b.append(tx);
   const x=el('button','ax');x.type='button';x.innerHTML=IC.x;x.title='Dismiss';x.onclick=()=>b.remove();b.append(x);
@@ -1504,15 +1554,18 @@ function sendGif(url){ci.value=url;updSend();sendMsg()}
 function openGif(){
   openModal((m,h)=>{
     m.append(el('h3','','Send a GIF'));
-    const s=el('input','inp');s.placeholder='Search Tenor…';m.append(s);
+    const s=el('input','inp');s.placeholder='Search Giphy…';s.autocapitalize='none';m.append(s);
     const grid=el('div','gifgrid');m.append(grid);
     const load=async()=>{grid.innerHTML='';grid.append(el('p','hint','Loading…'));
-      const q=s.value.trim();const url='https://tenor.googleapis.com/v2/'+(q?'search':'featured')+'?key=LIVDSRZULELA&limit=24&media_filter=gif,tinygif'+(q?'&q='+encodeURIComponent(q):'');
-      try{const r=await fetch(url);const j=await r.json();const res=j.results||[];grid.innerHTML='';
-        if(!res.length){grid.append(el('p','hint','No GIFs found.'));return}
-        res.forEach(g=>{const mf=g.media_formats||{},media=mf.tinygif||mf.gif;if(!media)return;const im=el('img');im.src=media.url;im.loading='lazy';im.title='Send this GIF';im.onclick=()=>{h.close();sendGif((mf.gif||media).url)};grid.append(im)});
-      }catch(e){grid.innerHTML='';grid.append(el('p','hint','Could not load GIFs. Paste a GIF link instead.'))}};
-    load();let t;s.oninput=()=>{clearTimeout(t);t=setTimeout(load,450)};setTimeout(()=>s.focus(),50);
+      const q=s.value.trim();
+      const url='https://api.giphy.com/v1/gifs/'+(q?'search':'trending')+'?api_key=GlVGYHkr3WSBnllca54iNt0yFbjz7L65&limit=24&rating=pg-13'+(q?'&q='+encodeURIComponent(q):'');
+      try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();const res=j.data||[];grid.innerHTML='';
+        if(!res.length){grid.append(el('p','hint',q?'No GIFs found for “'+q+'”.':'No GIFs available right now.'));return}
+        res.forEach(g=>{const imgs=g.images||{},small=(imgs.fixed_width_small||imgs.fixed_width||imgs.preview_gif||imgs.original||{}).url,full=(imgs.downsized_medium||imgs.fixed_height||imgs.original||{}).url;
+          if(!small)return;const im=el('img');im.src=small;im.loading='lazy';im.title='Send this GIF';im.onclick=()=>{h.close();sendGif(full||small)};grid.append(im)})}
+      catch(e){grid.innerHTML='';grid.append(el('p','hint','Could not load GIFs. Check your connection and try again.'))}};
+    load();let t;s.oninput=()=>{clearTimeout(t);t=setTimeout(load,450)};
+    s.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();clearTimeout(t);load()}};setTimeout(()=>s.focus(),50);
   })}
 
 function openChanRt(cid){
