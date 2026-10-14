@@ -1578,11 +1578,7 @@ async function loadAnnouncements(){
 }
 
 /* ================= GIF picker ================= */
-function sendGif(url){ci.value=url;updSend();sendMsg(){
-  const t=ci.value.trim();if(!t||!curCh)return;ci.value='';autoGrow();
-  const {data,error}=await sb.from('messages').insert({channel_id:curCh,content:t}).select(MSG).single();
-  if(error){toast(error.message);ci.value=t;autoGrow();return}
-  upsertMsg(data,true)};
+function sendGif(url){ci.value=url;updSend();sendMsg()}
 const favHasGif=full=>getFavGifs().some(x=>(x.full||x)===full);
 function toggleFavGif(full,small){let a=getFavGifs();const i=a.findIndex(x=>(x.full||x)===full);if(i>-1)a.splice(i,1);else a.unshift({full,small});ls.set(GIFKEY,JSON.stringify(a.slice(0,80)))}
 function openGif(){
@@ -1731,10 +1727,7 @@ function renderMsgs(scroll,freshId,forceBottom){
 const ci=$('ci');
 function autoGrow(){ci.style.height='auto';ci.style.height=Math.min(ci.scrollHeight,150)+'px'}
 const updSend=()=>$('send').classList.toggle('idle',!ci.value.trim());
-async function sendMsg(){
-  const t=ci.value.trim();if(!t||(!curCh&&!dmWith))return;ci.value='';autoGrow();updSend();
-  const p={tmp:'t'+(++tmpN),ctx:ctxKey(),content:t,created_at:new Date().toISOString(),user_id:me.id,status:'sending'};
-  pend.push(p);renderMsgs('keep',p.tmp,true);sendPending(p)}
+function sendMsg(){const t=ci.value.trim();if(!t||(!curCh&&!dmWith))return;ci.value='';autoGrow();updSend();const p={tmp:'t'+(++tmpN),ctx:ctxKey(),content:t,created_at:new Date().toISOString(),user_id:me.id,status:'sending'};pend.push(p);renderMsgs('keep',p.tmp,true);sendPending(p)}
 async function sendPending(p){
   if(!navigator.onLine){p.status='queued';renderMsgs('keep');return}
   p.status='sending';p.err='';renderMsgs('keep');
