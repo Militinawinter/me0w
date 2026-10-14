@@ -544,6 +544,9 @@ input,textarea{cursor:text}
 .gifcell:hover .gifstar,.gifstar.on{opacity:1}
 .gifstar:hover{transform:scale(1.12)}
 .gifstar.on{color:#fbbf24}
+.giferr{grid-column:1/-1}
+.gifman{display:flex;gap:8px;margin-top:8px}
+.gifman .inp{flex:1}
 
 /* ================= perf ================= */
 .panel{transform:translateZ(0)}
@@ -1672,14 +1675,26 @@ function openGif(){
     const drawFav=()=>{grid.innerHTML='';const a=getFavGifs();
       if(!a.length){grid.append(el('p','hint','No favorites yet. Tap ★ on a GIF to save it here.'));return}
       a.forEach(x=>grid.append(tile(x.small||x.full,x.full||x)))};
+    const showError=()=>{grid.innerHTML='';
+      const box=el('div','giferr');
+      box.append(el('p','hint','Could not load GIFs. Check your connection, then try again.'));
+      const br=el('div','btnrow');br.append(button('Try again',()=>load(),'ghost sm'));box.append(br);
+      const man=el('div','gifman');
+      const u2=el('input','inp');u2.placeholder='…or paste a GIF / image link';u2.autocapitalize='none';
+      const go=()=>{const v=u2.value.trim();if(!/^https?:\/\//i.test(v))return toast('Paste a valid image link');h.close();sendGif(v)};
+      u2.onkeydown=ev=>{if(ev.key==='Enter'){ev.preventDefault();go()}};
+      man.append(u2,button('Send',go,'sm'));box.append(el('p','hint','You can still send a GIF by pasting its link:'),man);
+      grid.append(box)};
     const load=async()=>{grid.innerHTML='';grid.append(el('p','hint','Loading…'));
       const q=s.value.trim();
       const url='https://api.giphy.com/v1/gifs/'+(q?'search':'trending')+'?api_key=GlVGYHkr3WSBnllca54iNt0yFbjz7L65&limit=24&rating=pg-13'+(q?'&q='+encodeURIComponent(q):'');
-      try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();const res=j.data||[];grid.innerHTML='';
+      const once=()=>fetch(url,{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});
+      try{let j;try{j=await once()}catch(e){await new Promise(z=>setTimeout(z,600));j=await once()}
+        const res=j.data||[];grid.innerHTML='';
         if(!res.length){grid.append(el('p','hint',q?'No GIFs found for “'+q+'”.':'No GIFs available right now.'));return}
         res.forEach(g=>{const imgs=g.images||{},small=(imgs.fixed_width_small||imgs.fixed_width||imgs.preview_gif||imgs.original||{}).url,full=(imgs.downsized_medium||imgs.fixed_height||imgs.original||{}).url;
           if(!small)return;grid.append(tile(small,full))})}
-      catch(e){grid.innerHTML='';grid.append(el('p','hint','Could not load GIFs. Check your connection and try again.'))}};
+      catch(e){showError()}};
     const setMode=mode=>{bDis.classList.toggle('on',mode==='discover');bFav.classList.toggle('on',mode==='fav');s.hidden=mode==='fav';if(mode==='fav')drawFav();else load()};
     bDis.onclick=()=>setMode('discover');bFav.onclick=()=>setMode('fav');
     load();let t;s.oninput=()=>{clearTimeout(t);t=setTimeout(load,450)};
@@ -1815,14 +1830,24 @@ async function sendPending(p){
   if(r.error){p.status='failed';p.err=r.error.message;renderMsgs('keep');return}
   pend=pend.filter(x=>x!==p);if(p.ctx===ctxKey())upsertMsg(dm?nd(r.data):r.data,true)}
 $('attBtn').onclick=()=>{if(!curCh&&!dmWith)return toast('Open a chat first');$('attFile').click()};
-$('attFile').onchange=async()=>{const f0=$('attFile').files[0];$('attFile').value='';if(!f0)return;if(!/^image\//.test(f0.type))return toast('Pick an image');
+async function sendImageFile(f0){
+  if(!f0)return;if(!/^image\//.test(f0.type||''))return toast('Pick an image');
+  if(!curCh&&!dmWith)return toast('Open a chat first');
   const ctx=ctxKey();toast('Uploading image…');const blob=await fitImg(f0,1280);if(!blob)return toast('Could not read that image');
   const path=me.id+'/'+(crypto.randomUUID?crypto.randomUUID():Date.now()+Math.random().toString(36).slice(2))+'.jpg';
   const {error}=await sb.storage.from('chat-images').upload(path,blob,{contentType:'image/jpeg'});
   if(error)return toast(/not found|bucket/i.test(error.message)?'Run schema_v5.sql in Supabase first':error.message);
   const url=sb.storage.from('chat-images').getPublicUrl(path).data.publicUrl;
   const p={tmp:'t'+(++tmpN),ctx,content:url,created_at:new Date().toISOString(),user_id:me.id,status:'sending'};
-  pend.push(p);if(ctx===ctxKey())renderMsgs('keep',p.tmp,true);sendPending(p)};
+  pend.push(p);if(ctx===ctxKey())renderMsgs('keep',p.tmp,true);sendPending(p)}
+$('attFile').onchange=()=>{const f0=$('attFile').files[0];$('attFile').value='';sendImageFile(f0)};
+ci.addEventListener('paste',e=>{
+  const dt=e.clipboardData;if(!dt)return;
+  const items=dt.items||[];let file=null;
+  for(const it of items){if(it.kind==='file'&&/^image\//.test(it.type)){file=it.getAsFile();break}}
+  if(!file){for(const f of (dt.files||[])){if(/^image\//.test(f.type)){file=f;break}}}
+  if(!file)return;
+  e.preventDefault();sendImageFile(file)});
 $('cf').onsubmit=e=>{e.preventDefault();sendMsg()};
 $('send').addEventListener('mousedown',e=>e.preventDefault());
 ci.oninput=()=>{autoGrow();updSend();typed();acUpdate()};
@@ -1935,7 +1960,7 @@ function accountTab(c){
   const frn=el('div','btnrow');frn.append(button('Save display name',async()=>{const u=fn.i.value.trim();if(!u)return;if(await saveProfile({display_name:u})){toast('Display name updated');t.firstChild.textContent=u;renderMe();refreshNames()}},'sm'));c.append(fn.w,frn);
   c.append(el('label','lbl','Username (cannot be changed)'));const fu=el('input','inp');fu.value=p.username||nameOf(me.id);fu.disabled=true;fu.readOnly=true;c.append(fu);
   const bfi=el('input');bfi.type='file';bfi.accept='image/*';bfi.hidden=true;
-  bfi.onchange=async()=>{const f0=bfi.files&&bfi.files[0];bfi.value='';if(!f0)return;const url=await fitImg(f0,2000);if(!url)return;if(await saveProfile({banner_url:url}))toast('Banner updated')};
+  bfi.onchange=async()=>{const f0=bfi.files&&bfi.files[0];bfi.value='';if(!f0)return;const b=await fitImg(f0,2000);if(!b)return;const url=await blobDataURL(b);if(!url)return;if(await saveProfile({banner_url:url}))toast('Banner updated')};
   c.append(el('label','lbl','Banner image'));const br0=el('div','btnrow');br0.append(bfi,button('Upload banner',()=>bfi.click(),'sm'),button('Remove banner',async()=>{if(await saveProfile({banner_url:null}))toast('Banner removed')},'ghost sm'));c.append(br0);
   c.append(el('label','lbl','About me'));const bio=el('textarea','inp');bio.rows=3;bio.maxLength=160;bio.value=p.bio||'';bio.placeholder='A short bio (160 characters)';c.append(bio);
   const br=el('div','btnrow');br.append(button('Save bio',async()=>{if(await saveProfile({bio:bio.value.trim()||null}))toast('Bio updated')},'sm'));c.append(br);
@@ -2051,6 +2076,7 @@ function adminTab(c){
         if(e)return toast(e.message);if(!d||!d.length)return toast('Not deleted. Run schema_v4.sql first.');
         row.remove();msgs=msgs.filter(x=>x.id!==r.id);if(!$('chat').hidden)renderMsgs('keep');toast('Message deleted')},'danger'));list.append(row)})};
   c.append(segCtl([['messages','Channels'],['dms','DMs']],kind,k=>{kind=k;load()}),list);load()}
+function blobDataURL(b){return new Promise(res=>{try{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>res(null);r.readAsDataURL(b)}catch(e){res(null)}})}
 function fitImg(file,max){return new Promise(res=>{const u=URL.createObjectURL(file),i=new Image();
   i.onload=()=>{const s=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas'),x=c.getContext('2d');c.width=Math.round(i.width*s);c.height=Math.round(i.height*s);
     x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>res(b),'image/jpeg',.85)};
@@ -2150,7 +2176,7 @@ function ssOverview(c){
     if(cur.icon_url){const im=el('img','full');im.src=cur.icon_url;im.alt='';prev.append(im)}else prev.textContent=ini(cur.name)};
   paint();ic.append(prev);
   const sfi=el('input');sfi.type='file';sfi.accept='image/*';sfi.hidden=true;
-  sfi.onchange=async()=>{const f0=sfi.files&&sfi.files[0];sfi.value='';if(!f0)return;const url=await fitImg(f0,512);if(!url)return;
+  sfi.onchange=async()=>{const f0=sfi.files&&sfi.files[0];sfi.value='';if(!f0)return;const url=await squareImg(f0);if(!url)return;
     const {data,error}=await sb.from('servers').update({icon_url:url}).eq('id',cur.id).select('id,name,owner_id,invite_code,icon_url').single();
     if(error)return toast(/column|icon_url/i.test(error.message)?'Run schema_v7.sql in Supabase first':error.message);
     applyServerRow(data);paint();toast('Server icon updated')};
