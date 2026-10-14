@@ -1634,6 +1634,7 @@ function msgEl(m,first,last,fresh){
   if(editingId===m.id){r.append(editBox(m));return r}
   const f=fmt(m.content),txt=m.content.trim(),pic=isImgUrl(txt);
   const b=el('div','bub tx'+(pic?' media':''));
+  if(pic)b.style.cssText='padding:0;background:none;border:0;box-shadow:none;white-space:normal';
   if(pic){
     const wrap=el('div','embed'),im=el('img');im.src=txt;im.loading='lazy';im.alt='image';
     im.onerror=()=>{wrap.remove();if(!b.querySelector('.lnk'))b.append(f.frag)};im.onclick=ev=>{ev.stopPropagation();openImg(txt)};
