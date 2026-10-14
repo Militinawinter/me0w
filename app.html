@@ -319,10 +319,11 @@ select.inp{padding:10px 12px;appearance:auto}
 @media(max-width:1120px){
   #app,#app.nomem,#app.home{grid-template-columns:76px 252px minmax(0,1fr)}
   #app.nomem .mem{display:flex}
-  .mem{position:fixed;right:10px;top:calc(10px + env(safe-area-inset-top,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));width:min(320px,86vw);z-index:50;transform:translateX(110%);transition:transform .5s var(--spring);background:var(--sheet)}
-  #app.memopen .mem{transform:none}
+  .mem{position:fixed;right:0;top:calc(10px + env(safe-area-inset-top,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));width:min(320px,86vw);z-index:50;transform:translateX(112%);visibility:hidden;pointer-events:none;transition:transform .5s var(--spring),visibility .5s;background:var(--sheet)}
+  #app.memopen .mem{transform:none;visibility:visible;pointer-events:auto}
   #app.memopen .scrim{opacity:1;pointer-events:auto}
   .mem .memx{display:grid}
+  .memhd{position:sticky;top:0;z-index:3;background:var(--sheet)}
 }
 /* ---------- phone ---------- */
 @media(max-width:760px){
@@ -338,7 +339,7 @@ select.inp{padding:10px 12px;appearance:auto}
   .drawer .dock{width:68px;flex:none}.drawer .side{flex:1}
   #app.nav .drawer{transform:none}
   #app.nav .scrim{opacity:1;pointer-events:auto}
-  .mem{top:calc(8px + env(safe-area-inset-top,0px));right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:min(320px,84vw)}
+  .mem{top:calc(8px + env(safe-area-inset-top,0px));right:0;bottom:calc(8px + env(safe-area-inset-bottom,0px));width:min(300px,80vw);border-top-right-radius:0;border-bottom-right-radius:0}
   .cirow .ib{opacity:.7}
   .ov{place-items:end center;padding:0}
   .mc{width:100%;border-radius:var(--r3) var(--r3) 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));max-height:calc(var(--vh) - 32px);transform:translateY(100%)}
@@ -1097,7 +1098,7 @@ async function loadServerData(id){
 async function selectServer(id){
   const s=servers.find(x=>x.id===id);if(!s)return;
   cur=s;curCh=null;dmWith=null;reads=[];mroles=new Map();msgs=[];members=[];roles=[];chans=[];closeChanRt();renderRail();$('mem').innerHTML='';
-  $('app').classList.remove('home');$('memBtn').hidden=false;
+  $('app').classList.remove('home');$('memBtn').hidden=false;closeNav();
   if(!await loadServerData(id))return;
   const last=ls.get('me0w-ch-'+id),ch=chans.find(c=>c.id===last)||chans[0];
   renderServerUI(true);
