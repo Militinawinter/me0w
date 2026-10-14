@@ -1589,6 +1589,7 @@ function showBanWall(reason,until){
 /* ================= Lock (local DM privacy lock) ================= */
 const KEEPKEY='me0w-keep';let keepUnlockedFor=null;
 const keepAll=()=>{try{return JSON.parse(ls.get(KEEPKEY)||'{}')}catch(e){return{}}};
+const keepSave=k=>{try{ls.set(KEEPKEY,JSON.stringify(k))}catch(e){}};
 const keepHas=u=>{const k=keepAll();return !!(k[u]&&k[u].pin)};
 function askKeepPin(u,promptTitle){return new Promise(res=>{let done=false;
   openModal((m,h)=>{m.append(el('h3','',promptTitle||'Locked chat'));
