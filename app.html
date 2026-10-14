@@ -8,14 +8,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>me0w</title>
-<link rel="manifest" id="mf"><link rel="apple-touch-icon" id="ati" href="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png">
-<link rel="icon" href="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png">
+<link rel="manifest" id="mf"><link rel="apple-touch-icon" id="ati" href="https://i.postimg.cc/2S1GmFgf/image.png">
+<link rel="icon" href="https://i.postimg.cc/2S1GmFgf/image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* =====================================================================
-   me0w  ·  liquid glass chat
+   me0w  ยท  liquid glass chat
    Materials come from CSS variables that the theme engine (JS) rewrites.
    .glass on <html> = frosted panels + glow; without it everything is solid.
    ===================================================================== */
@@ -538,10 +538,10 @@ input,textarea{cursor:text}
 </head>
 <body>
 <div id="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
-<div id="splash"><div class="sp-in"><img class="sp-cat" src="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png" alt=""><div class="sp-dots"><i></i><i></i><i></i></div><small id="spTip"></small></div></div>
+<div id="splash"><div class="sp-in"><img class="sp-cat" src="https://i.postimg.cc/2S1GmFgf/image.png" alt=""><div class="sp-dots"><i></i><i></i><i></i></div><small id="spTip"></small></div></div>
 
 <div id="setup" class="center" hidden><div class="box panel">
-  <div class="brand"><img class="logo" src="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png" alt=""></div>
+  <div class="brand"><img class="logo" src="https://i.postimg.cc/2S1GmFgf/image.png" alt=""></div>
   <h2>Connect your backend</h2><p class="s">One-time setup, about 5 minutes.</p>
   <ol><li>Create a free project at <code>supabase.com</code></li>
   <li>SQL Editor: run <code>schema.sql</code>, then <code>schema_v2.sql</code>, then <code>schema_v3.sql</code></li>
@@ -550,7 +550,7 @@ input,textarea{cursor:text}
 </div></div>
 
 <div id="auth" class="center" hidden><div class="box panel">
-  <div class="brand"><img class="logo" src="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png" alt=""></div>
+  <div class="brand"><img class="logo" src="https://i.postimg.cc/2S1GmFgf/image.png" alt=""></div>
   <div class="inv" id="inv" hidden>You were invited to a server. Sign in or create an account to join.</div>
   <div class="seg" style="margin-bottom:4px"><button id="tIn" class="on">Sign in</button><button id="tUp">Create account</button></div>
   <div id="uw" hidden><label class="lbl">Username</label><input class="inp" id="au" maxlength="20" autocomplete="username" autocapitalize="none" placeholder="letters, numbers, _ and ."></div>
@@ -564,7 +564,7 @@ input,textarea{cursor:text}
   <div class="scrim" id="scrim"></div>
   <div class="drawer">
     <nav class="dock panel">
-      <button class="rb home on" id="homeBtn" title="Home" aria-label="Home"><img class="logo" src="https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png" alt=""></button>
+      <button class="rb home on" id="homeBtn" title="Home" aria-label="Home"><img class="logo" src="https://i.postimg.cc/2S1GmFgf/image.png" alt=""></button>
       <div class="sep"></div>
       <div id="srv"></div>
       <button class="rb add" id="addSrv" title="Add a server" aria-label="Add a server">+</button>
@@ -632,7 +632,7 @@ const show=id=>{['setup','auth','app'].forEach(x=>$(x).hidden=x!==id);if(id!=='a
 let deferredInstall=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;if(window.onInstallReady)window.onInstallReady()});
 addEventListener('appinstalled',()=>{deferredInstall=null});
-(function(){const logo='https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png';
+(function(){const logo='https://i.postimg.cc/2S1GmFgf/image.png';
   const base=location.href.split('#')[0].split('?')[0];
   const mf={name:'me0w',short_name:'me0w',start_url:base,scope:base.replace(/[^/]*$/,''),display:'standalone',background_color:'#0b0716',theme_color:'#0b0716',icons:[{src:logo,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
   $('mf').href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/manifest+json'}))})();
@@ -665,7 +665,7 @@ const IC={
  send:svg('<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>'),
  megaphone:svg('<path d="M3 11v3a1 1 0 0 0 1 1h2l3 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 8a4 4 0 0 1 0 8M13 5a7 7 0 0 1 0 14"/>')
 };
-const LOGO='https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png';
+const LOGO='https://i.postimg.cc/2S1GmFgf/image.png';
 const CAT='<img class="cat" src="'+LOGO+'" alt="">';
 const ib=(icon,title,fn,cls)=>{const b=el('button','ib'+(cls?' '+cls:''));b.type='button';b.innerHTML=IC[icon];b.title=title;b.setAttribute('aria-label',title);b.onclick=e=>{e.stopPropagation();fn(e)};return b};
 
@@ -878,7 +878,7 @@ function incoming(m){
   if(L.sound)blip();
   if(document.hidden){unreadTitle++;document.title='('+unreadTitle+') me0w';
     if(L.notif&&'Notification' in window&&Notification.permission==='granted'&&(m.dm||mentionsMe(m.content))){
-      try{const c=chans.find(x=>x.id===m.channel_id),n=new Notification(nameOf(m.user_id)+(c?' in #'+c.name:''),{body:m.content.slice(0,140),tag:'me0w-mention',icon:'https://i.postimg.cc/qRvJqPrk/image-removebg-preview-(20).png'});n.onclick=()=>{window.focus();n.close()}}catch(e){}}}}
+      try{const c=chans.find(x=>x.id===m.channel_id),n=new Notification(nameOf(m.user_id)+(c?' in #'+c.name:''),{body:m.content.slice(0,140),tag:'me0w-mention',icon:'https://i.postimg.cc/2S1GmFgf/image.png'});n.onclick=()=>{window.focus();n.close()}}catch(e){}}}}
 
 /* ---- permissions ---- */
 const isOwner=u=>!!cur&&cur.owner_id===u;
@@ -1080,10 +1080,10 @@ function closeNav(){$('app').classList.remove('nav','memopen')}
 function closeChanRt(){if(chanRt){sb.removeChannel(chanRt);chanRt=null}typers.forEach(t=>clearTimeout(t));typers.clear();renderTyping()}
 function setChatHeader(){
   $('callBtn').hidden=!dmWith;$('vidBtn').hidden=!dmWith;
-  if(dmWith){$('mTitle').textContent='@ '+nameOf(dmWith);const px=(P.get(dmWith)||{}).status_text;$('mSub').textContent=stLabel(dmWith)+(px?' · '+px:'');$('ci').placeholder='Message @'+nameOf(dmWith);return}
+  if(dmWith){$('mTitle').textContent='@ '+nameOf(dmWith);const px=(P.get(dmWith)||{}).status_text;$('mSub').textContent=stLabel(dmWith)+(px?' ยท '+px:'');$('ci').placeholder='Message @'+nameOf(dmWith);return}
   const c=chans.find(x=>x.id===curCh);
   $('mTitle').textContent=c?c.name:(cur?'No channels':'');
-  $('mSub').textContent=cur?cur.name+' · '+members.length+' member'+(members.length===1?'':'s'):'';
+  $('mSub').textContent=cur?cur.name+' ยท '+members.length+' member'+(members.length===1?'':'s'):'';
   $('ci').placeholder=c?'Message '+c.name:'Message'}
 function goHome(){
   cur=null;curCh=null;dmWith=null;msgs=[];members=[];roles=[];chans=[];mroles=new Map();reads=[];closeChanRt();renderRail();pane('home');$('mem').innerHTML='';$('mTitle').textContent='Friends';$('mSub').textContent='';
@@ -1126,7 +1126,7 @@ function renderMembers(){
   const on=m=>online.has(m.user_id)||m.user_id===me.id,byName=(a,b)=>nameOf(a.user_id).localeCompare(nameOf(b.user_id));
   const nOn=members.filter(on).length;const hd=el('div','memhd');hd.append(el('div','mhd','Members'));
   const xb=el('button','ib memx');xb.type='button';xb.title='Close';xb.setAttribute('aria-label','Close members');xb.innerHTML=IC.x;xb.onclick=()=>closeNav();hd.append(xb);
-  mm.append(hd,el('div','hint',nOn+' online · '+members.length+' total'));
+  mm.append(hd,el('div','hint',nOn+' online ยท '+members.length+' total'));
   const groups=[];
   const ownerM=members.filter(m=>m.user_id===cur.owner_id&&on(m));if(ownerM.length)groups.push({name:'Owner',color:'#facc15',list:ownerM});
   roles.slice().sort((a,b)=>b.pos-a.pos).forEach(r=>{const l=members.filter(m=>m.user_id!==cur.owner_id&&m.role_id===r.id&&on(m)).sort(byName);if(l.length)groups.push({name:r.name,color:r.is_default?null:r.color,list:l})});
@@ -1134,8 +1134,8 @@ function renderMembers(){
   const off=members.filter(m=>!on(m)).sort(byName);
   const row=(m,isOn)=>{const b=el('button','mrow'+(isOn?'':' off')),w=el('div','avw');b.type='button';w.append(av(m.user_id),stDot(m.user_id));
     const n=el('span','nm',nameOf(m.user_id));n.dataset.nm=m.user_id;const c=roleColor(m.user_id);if(c)n.style.color=c;const nw=el('div','nmw');nw.append(n);{const v=vtick(m.user_id);if(v)nw.append(v)}b.append(w,nw);b.onclick=()=>{memberCard(m.user_id);closeNav()};return b};
-  groups.forEach(g=>{const h=el('div','ch-h',g.name+' · '+g.list.length);if(g.color)h.style.color=g.color;mm.append(h);g.list.forEach(m=>mm.append(row(m,true)))});
-  if(off.length){mm.append(el('div','ch-h','Offline · '+off.length));off.forEach(m=>mm.append(row(m,false)))}
+  groups.forEach(g=>{const h=el('div','ch-h',g.name+' ยท '+g.list.length);if(g.color)h.style.color=g.color;mm.append(h);g.list.forEach(m=>mm.append(row(m,true)))});
+  if(off.length){mm.append(el('div','ch-h','Offline ยท '+off.length));off.forEach(m=>mm.append(row(m,false)))}
   memEl.append(mm)}
 function chip(name,color){const c=el('span','rchip'),i=el('i');i.style.background=color||'var(--muted)';c.append(i,document.createTextNode(name));return c}
 function memberCard(uid){
@@ -1154,7 +1154,7 @@ function memberCard(uid){
       if(isAdmin()||(cur&&can('manage_roles')&&canManage(uid))){const pb=el('button','rchip plus','+');pb.type='button';pb.title='Add or remove roles';pb.onclick=()=>rolePicker(uid,drawChips);chips.append(pb)}
       chips.append(chip(stLabel(uid),stCol(stOf(uid))))};drawChips();
     tw.append(chips);top.append(tw);pin.append(top);
-    if(p.status_text)pin.append(el('p','mp','“'+p.status_text+'”'));
+    if(p.status_text)pin.append(el('p','mp','โ€'+p.status_text+'โ€'));
     if(p.bio)pin.append(el('p','mp',p.bio));
     const grid=el('div','pgrid2 psec');
     const gs=(k,vv)=>{const d=el('div','pstat');d.append(el('b','',vv),el('small','',k));grid.append(d)};
@@ -1314,7 +1314,7 @@ async function seenModal(v){await loadP(v.map(x=>x.user_id));
 function metaRow(g){
   const last=g.items[g.items.length-1],d=el('div','gmeta');d.append(document.createTextNode(hm(last.created_at)));
   if(g.uid===me.id){
-    if(last.tmp){const s=el('span','mst '+last.status,last.status==='failed'?'Failed · '+(last.err||'not sent'):last.status==='queued'?'Waiting for connection…':'Sending…');d.append(s);
+    if(last.tmp){const s=el('span','mst '+last.status,last.status==='failed'?'Failed ยท '+(last.err||'not sent'):last.status==='queued'?'Waiting for connectionโ€ฆ':'Sendingโ€ฆ');d.append(s);
       if(last.status==='failed'){const r=el('button','mlink','Retry'),x=el('button','mlink','Delete');r.type=x.type='button';r.onclick=()=>sendPending(last);x.onclick=()=>{pend=pend.filter(p=>p!==last);renderMsgs('keep')};d.append(r,x)}}
     else{const lm=lastMine();if(lm&&lm.id===last.id)d.append(seenEl(last))}}
   return d}
@@ -1364,11 +1364,11 @@ const sndEnd=()=>{if(!L.sound)return;tone(540,260,.3,'sine',.075)};
 function stopRingback(){if(callState){clearInterval(callState.ringTimer);callState.ringTimer=null;try{ringOutAudio&&ringOutAudio.pause()}catch(e){}}}
 function updateCallChip(){
   const chip=$('callChip');if(!chip)return;
-  if(incomingCall){chip.hidden=false;chip.classList.add('incoming');chip.innerHTML='<span class="cd"></span><span>'+nameOf(incomingCall.from)+' is calling…</span>';chip.onclick=()=>{const o=$('incall');if(o&&o.classList.contains('on'))return;showIncoming(incomingCall)};return}
+  if(incomingCall){chip.hidden=false;chip.classList.add('incoming');chip.innerHTML='<span class="cd"></span><span>'+nameOf(incomingCall.from)+' is callingโ€ฆ</span>';chip.onclick=()=>{const o=$('incall');if(o&&o.classList.contains('on'))return;showIncoming(incomingCall)};return}
   chip.classList.remove('incoming');
   if(!callState){chip.hidden=true;chip.innerHTML='';chip.onclick=null;return}
   chip.hidden=false;const t=callState.timerEl?callState.timerEl.textContent:fmtClock(Date.now()-callState.started);
-  chip.innerHTML=(callState.micOn?IC.phone:IC.micOff)+'<span class="cd"></span><span>'+nameOf(callState.peer)+' · '+t+'</span>';
+  chip.innerHTML=(callState.micOn?IC.phone:IC.micOff)+'<span class="cd"></span><span>'+nameOf(callState.peer)+' ยท '+t+'</span>';
   chip.onclick=()=>restoreCall()}
 function minimizeCall(){if(callState){$('call').classList.remove('on');updateCallChip()}}
 function restoreCall(){if(callState){$('call').classList.add('on');updateCallChip()}}
@@ -1385,7 +1385,7 @@ async function startCall(uid,mode){
   const chan=sb.channel(topic,{config:{broadcast:{self:false}}});
   chan.on('broadcast',{event:'call'},({payload})=>onCall(payload));
   callState={peer:uid,mode,callId:id,stream,micOn:true,camOn:mode==='video',share:mode==='screen',chan,topic,role:'caller',pendingIce:[],remote:null,connected:false,started:Date.now()};
-  openCallUI('Calling '+nameOf(uid)+'…');
+  openCallUI('Calling '+nameOf(uid)+'โ€ฆ');
   sndRingOut();callState.ringTimer=setInterval(sndRingOut,3000);
   chan.subscribe(st=>{if(st==='SUBSCRIBED')chan.send({type:'broadcast',event:'call',payload:{call:id,from:me.id,to:uid,type:'ring',mode}})});
   callState.ringTimeout=setTimeout(()=>{if(callState&&callState.role==='caller'&&!callState.remote){toast(nameOf(uid)+' did not answer');endCall()}},45000);
@@ -1426,7 +1426,7 @@ function openCallUI(title){
   const head=el('div','callhead');head.append(av(callState.peer,'sm'));const info=el('div');callState.titleEl=el('b','',title);callState.timerEl=el('small','','00:00');info.append(callState.titleEl,callState.timerEl);head.append(info);
   const mini=el('button','cbtn mini');mini.type='button';mini.title='Minimize';mini.setAttribute('aria-label','Minimize');mini.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';mini.onclick=e=>{e.stopPropagation();minimizeCall()};head.append(mini);box.append(head);
   const stage=el('div','callstage');const rv=el('video');rv.autoplay=true;rv.playsInline=true;rv.setAttribute('playsinline','');stage.append(rv);callState.remoteVideo=rv;
-  callState.msgEl=el('div','callmsg',callState.mode==='screen'?'Sharing your screen…':'Connecting…');stage.append(callState.msgEl);
+  callState.msgEl=el('div','callmsg',callState.mode==='screen'?'Sharing your screenโ€ฆ':'Connectingโ€ฆ');stage.append(callState.msgEl);
   const pip=el('div','pip');const lv=el('video');lv.autoplay=true;lv.muted=true;lv.playsInline=true;lv.setAttribute('playsinline','');lv.srcObject=callState.stream;pip.append(lv);if(callState.mode==='audio')pip.style.display='none';stage.append(pip);callState.localVideo=lv;callState.pip=pip;box.append(stage);
   const ctl=el('div','callctl');
   callState.micBtn=cbtn('mic','Mute microphone',()=>toggleMic());
@@ -1578,30 +1578,32 @@ async function loadAnnouncements(){
 }
 
 /* ================= GIF picker ================= */
-function sendGif(url){ci.value=url;updSend();sendMsg()}
-const GIFKEY='me0w-gifs';
-const getFavGifs=()=>{try{const a=JSON.parse(ls.get(GIFKEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}};
+function sendGif(url){ci.value=url;updSend();sendMsg(){
+  const t=ci.value.trim();if(!t||!curCh)return;ci.value='';autoGrow();
+  const {data,error}=await sb.from('messages').insert({channel_id:curCh,content:t}).select(MSG).single();
+  if(error){toast(error.message);ci.value=t;autoGrow();return}
+  upsertMsg(data,true)};
 const favHasGif=full=>getFavGifs().some(x=>(x.full||x)===full);
 function toggleFavGif(full,small){let a=getFavGifs();const i=a.findIndex(x=>(x.full||x)===full);if(i>-1)a.splice(i,1);else a.unshift({full,small});ls.set(GIFKEY,JSON.stringify(a.slice(0,80)))}
 function openGif(){
   openModal((m,h)=>{
     m.append(el('h3','','Send a GIF'));
-    const tabs=el('div','seg');const bDis=el('button','on','Discover'),bFav=el('button',null,'Favorites ★');tabs.append(bDis,bFav);
-    const s=el('input','inp');s.placeholder='Search Giphy…';s.autocapitalize='none';
+    const tabs=el('div','seg');const bDis=el('button','on','Discover'),bFav=el('button',null,'Favorites โ…');tabs.append(bDis,bFav);
+    const s=el('input','inp');s.placeholder='Search Giphyโ€ฆ';s.autocapitalize='none';
     const grid=el('div','gifgrid');
     m.append(tabs,s,grid);
     const tile=(small,full)=>{const cell=el('div','gifcell'),im=el('img');im.src=small;im.loading='lazy';im.title='Send this GIF';im.onclick=()=>{h.close();sendGif(full||small)};
-      const star=el('button','gifstar'+(favHasGif(full)?' on':''));star.type='button';star.textContent='★';star.title='Add or remove favorite';
+      const star=el('button','gifstar'+(favHasGif(full)?' on':''));star.type='button';star.textContent='โ…';star.title='Add or remove favorite';
       star.onclick=ev=>{ev.stopPropagation();toggleFavGif(full,small);star.classList.toggle('on')};
       cell.append(im,star);return cell};
     const drawFav=()=>{grid.innerHTML='';const a=getFavGifs();
-      if(!a.length){grid.append(el('p','hint','No favorites yet. Tap ★ on a GIF to save it here.'));return}
+      if(!a.length){grid.append(el('p','hint','No favorites yet. Tap โ… on a GIF to save it here.'));return}
       a.forEach(x=>grid.append(tile(x.small||x.full,x.full||x)))};
-    const load=async()=>{grid.innerHTML='';grid.append(el('p','hint','Loading…'));
+    const load=async()=>{grid.innerHTML='';grid.append(el('p','hint','Loadingโ€ฆ'));
       const q=s.value.trim();
       const url='https://api.giphy.com/v1/gifs/'+(q?'search':'trending')+'?api_key=GlVGYHkr3WSBnllca54iNt0yFbjz7L65&limit=24&rating=pg-13'+(q?'&q='+encodeURIComponent(q):'');
       try{const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();const res=j.data||[];grid.innerHTML='';
-        if(!res.length){grid.append(el('p','hint',q?'No GIFs found for “'+q+'”.':'No GIFs available right now.'));return}
+        if(!res.length){grid.append(el('p','hint',q?'No GIFs found for โ€'+q+'โ€.':'No GIFs available right now.'));return}
         res.forEach(g=>{const imgs=g.images||{},small=(imgs.fixed_width_small||imgs.fixed_width||imgs.preview_gif||imgs.original||{}).url,full=(imgs.downsized_medium||imgs.fixed_height||imgs.original||{}).url;
           if(!small)return;grid.append(tile(small,full))})}
       catch(e){grid.innerHTML='';grid.append(el('p','hint','Could not load GIFs. Check your connection and try again.'))}};
@@ -1660,7 +1662,7 @@ function msgEl(m,first,last,fresh){
   if(f.mention&&!mine)r.classList.add('mentioned');
   r.append(b);
   if(m.tmp)return r;
-  b.ondblclick=()=>toggleRx(m,'❤️');
+  b.ondblclick=()=>toggleRx(m,'โค๏ธ');
   const rr=rx.get(rxKey(dmWith?'d':'c',m.id))||[];
   if(rr.length){const by=new Map();rr.forEach(x=>{const e=by.get(x.emoji)||[];e.push(x.user_id);by.set(x.emoji,e)});
     const row=el('div','rxs');by.forEach((us,e)=>{const c=el('button','rx'+(us.includes(me.id)?' mine':''));c.type='button';c.append(document.createTextNode(e+' '),el('b','',String(us.length)));
@@ -1680,7 +1682,7 @@ function editBox(m){
   t.oninput=()=>{editDraft=t.value;auto()};
   t.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&L.enterSend){e.preventDefault();saveEdit(m)}else if(e.key==='Escape'){e.preventDefault();cancelEdit()}};
   const row=el('div','er'),s=el('button','btn sm','Save'),c=el('button','btn ghost sm','Cancel');s.type=c.type='button';s.onclick=()=>saveEdit(m);c.onclick=cancelEdit;row.append(s,c);
-  w.append(t,el('small','',L.enterSend?'Enter to save · Esc to cancel · Shift+Enter for a new line':'Esc to cancel'),row);
+  w.append(t,el('small','',L.enterSend?'Enter to save ยท Esc to cancel ยท Shift+Enter for a new line':'Esc to cancel'),row);
   setTimeout(()=>{t.focus();t.setSelectionRange(t.value.length,t.value.length);auto()},0);return w}
 async function saveEdit(m){
   const t=editDraft.trim();if(!t)return toast('A message cannot be empty. Use delete instead.');
@@ -1688,7 +1690,7 @@ async function saveEdit(m){
   const {data,error}=await (dmWith?sb.from('dms').update({content:t}).eq('id',m.id).select(DMSEL).single():sb.from('messages').update({content:t}).eq('id',m.id).select(MSG).single());
   if(error)return toast(error.message);editingId=null;upsertMsg(dmWith?nd(data):data,false)}
 async function delMsg(m,skip){
-  if(!skip&&!await confirmBox({title:'Delete message?',text:m.content.length>140?m.content.slice(0,140)+'…':m.content,ok:'Delete',danger:true}))return;
+  if(!skip&&!await confirmBox({title:'Delete message?',text:m.content.length>140?m.content.slice(0,140)+'โ€ฆ':m.content,ok:'Delete',danger:true}))return;
   const {data,error}=await sb.from(dmWith?'dms':'messages').delete().eq('id',m.id).select('id');
   if(error)return toast(error.message);if(!data||!data.length)return toast('Could not delete that message');
   msgs=msgs.filter(x=>x.id!==m.id);renderMsgs('keep')}
@@ -1744,7 +1746,7 @@ async function sendPending(p){
   pend=pend.filter(x=>x!==p);if(p.ctx===ctxKey())upsertMsg(dm?nd(r.data):r.data,true)}
 $('attBtn').onclick=()=>{if(!curCh&&!dmWith)return toast('Open a chat first');$('attFile').click()};
 $('attFile').onchange=async()=>{const f0=$('attFile').files[0];$('attFile').value='';if(!f0)return;if(!/^image\//.test(f0.type))return toast('Pick an image');
-  const ctx=ctxKey();toast('Uploading image…');const blob=await fitImg(f0,1280);if(!blob)return toast('Could not read that image');
+  const ctx=ctxKey();toast('Uploading imageโ€ฆ');const blob=await fitImg(f0,1280);if(!blob)return toast('Could not read that image');
   const path=me.id+'/'+(crypto.randomUUID?crypto.randomUUID():Date.now()+Math.random().toString(36).slice(2))+'.jpg';
   const {error}=await sb.storage.from('chat-images').upload(path,blob,{contentType:'image/jpeg'});
   if(error)return toast(/not found|bucket/i.test(error.message)?'Run schema_v5.sql in Supabase first':error.message);
@@ -1759,7 +1761,7 @@ ci.onkeydown=e=>{
   if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&L.enterSend){e.preventDefault();sendMsg()}
   else if(e.key==='ArrowUp'&&!ci.value&&L.enterSend){const m=[...msgs].reverse().find(x=>x.user_id===me.id);if(m){e.preventDefault();startEdit(m)}}};
 new ResizeObserver(()=>{$('app').style.setProperty('--cfh',$('cfw').offsetHeight+'px');if(pinned&&!$('chat').hidden){const b=$('msgs');b.scrollTop=b.scrollHeight}}).observe($('cfw'));
-const EMOJI='😺 😸 😹 😻 😼 😽 🙀 😿 😾 🐱 🐾 🐟 😀 😂 🤣 😊 😍 🥰 😘 😎 🤩 🥳 😭 😅 🤔 😴 😮 😢 😡 🙏 👍 👎 👏 🙌 💪 👀 🔥 ✨ 💖 💜 🎉 💯 ☕ 🍕 🌈 🌙 ⭐ 🎮'.split(' ');
+const EMOJI='๐บ ๐ธ ๐น ๐ป ๐ผ ๐ฝ ๐€ ๐ฟ ๐พ ๐ฑ ๐พ ๐ ๐€ ๐ ๐คฃ ๐ ๐ ๐ฅฐ ๐ ๐ ๐คฉ ๐ฅณ ๐ญ ๐… ๐ค” ๐ด ๐ฎ ๐ข ๐ก ๐ ๐‘ ๐‘ ๐‘ ๐ ๐’ช ๐‘€ ๐”ฅ โจ ๐’– ๐’ ๐ ๐’ฏ โ• ๐• ๐ ๐ โญ ๐ฎ'.split(' ');
 EMOJI.forEach(e=>{const b=el('button','',e);b.type='button';b.onmousedown=ev=>ev.preventDefault();b.onclick=()=>{ci.setRangeText(e,ci.selectionStart,ci.selectionEnd,'end');autoGrow();updSend();ci.focus()};$('emo').append(b)});
 $('emoBtn').onmousedown=e=>e.preventDefault();
 $('emoBtn').onclick=()=>{$('emo').hidden=!$('emo').hidden};
@@ -1787,7 +1789,7 @@ async function loadFriends(){
   fr=data||[];await loadP(fr.flatMap(f=>[f.requester,f.addressee]));renderFriends();renderHomeList()}
 document.querySelectorAll('.ftabs button').forEach(b=>b.onclick=()=>{ftab=b.dataset.t;renderFriends()});
 function frow(id,right){const r=el('div','row'),w=el('div','avw'),isOn=online.has(id);const a0=av(id);a0.onclick=()=>memberCard(id);w.append(a0,stDot(id));
-  const n=el('div','nm'),sp=el('span','',nameOf(id));sp.dataset.nm=id;const l1=el('div','vrow');l1.append(sp);{const v=vtick(id);if(v)l1.append(v)}n.append(l1,el('small','',stLabel(id)+((P.get(id)||{}).status_text?' · '+P.get(id).status_text:'')));r.append(w,n);right.forEach(x=>r.append(x));return r}
+  const n=el('div','nm'),sp=el('span','',nameOf(id));sp.dataset.nm=id;const l1=el('div','vrow');l1.append(sp);{const v=vtick(id);if(v)l1.append(v)}n.append(l1,el('small','',stLabel(id)+((P.get(id)||{}).status_text?' ยท '+P.get(id).status_text:'')));r.append(w,n);right.forEach(x=>r.append(x));return r}
 function emptyState(text){const e=el('div','empty');e.innerHTML=CAT;e.append(document.createTextNode(text));return e}
 function renderFriends(){
   const body=$('fbody'),other=f=>f.requester===me.id?f.addressee:f.requester;
@@ -1858,7 +1860,7 @@ function previewCard(){
   const pv=el('div','pv'),p=el('div','pvp panel');
   const g1=el('div','grp'),a=el('div','av sm','M');a.style.backgroundColor='hsl(265 60% 55%)';
   const c1=el('div','col'),n1=el('span','gname','bro'),m1=el('div','msg first last'),b1=el('div','bub tx','Liquid glass looks great');m1.append(b1);c1.append(n1,m1);g1.append(a,c1);
-  const g2=el('div','grp mine'),c2=el('div','col'),m2=el('div','msg first'),b2=el('div','bub tx','It follows me to every device'),m3=el('div','msg last'),b3=el('div','bub tx','Even my phone 🐾');
+  const g2=el('div','grp mine'),c2=el('div','col'),m2=el('div','msg first'),b2=el('div','bub tx','It follows me to every device'),m3=el('div','msg last'),b3=el('div','bub tx','Even my phone ๐พ');
   m2.append(b2);m3.append(b3);c2.append(m2,m3);g2.append(c2);
   p.append(g1,g2);pv.append(p);return pv}
 function appearanceTab(c,h){
@@ -1882,7 +1884,7 @@ function appearanceTab(c,h){
     hold.append(colorRow('Start colour','a',()=>effAB().a),colorRow('End colour','b',()=>effAB().b));
     hold.append(el('div','lbl','Background'));
     hold.append(swRow('Gradient background','Tint the whole app with a gradient',S.grad,v=>{setS({grad:v});draw()}));
-    if(S.grad)hold.append(colorRow('Gradient start','g1'),colorRow('Gradient end','g2'),rangeRow('Angle','ang',0,360,'°'));
+    if(S.grad)hold.append(colorRow('Gradient start','g1'),colorRow('Gradient end','g2'),rangeRow('Angle','ang',0,360,'ยฐ'));
     hold.append(el('div','lbl','Shape and text'));
     hold.append(rangeRow('Corner roundness','radius',0,24,'px'),rangeRow('Text size','fs',13,18,'px'),
       swRow('Compact messages','Tighter spacing in chat',S.compact,v=>setS({compact:v})),
@@ -1931,7 +1933,7 @@ function installTab(c){
 function adminTab(c){
   c.append(el('p','hint','Admin tools. Deleting is permanent and applies for everyone. DMs are private, so only open that list when you are moderating a report.'));
   const aw=el('div','psec');aw.append(el('h4','','Send announcement'));
-  const atxt=el('textarea','inp ta');atxt.rows=3;atxt.maxLength=500;atxt.placeholder='Message to everyone…';atxt.style.width='100%';atxt.style.resize='vertical';
+  const atxt=el('textarea','inp ta');atxt.rows=3;atxt.maxLength=500;atxt.placeholder='Message to everyoneโ€ฆ';atxt.style.width='100%';atxt.style.resize='vertical';
   const alvl=el('select','inp');[['info','Info'],['success','Success'],['warning','Warning'],['danger','Important']].forEach(([v,t])=>{const o=el('option',null,t);o.value=v;alvl.append(o)});
   const asend=button('Send to everyone',async()=>{const body=atxt.value.trim();if(!body)return toast('Type a message first');
     const {data,error}=await sb.from('announcements').insert({body,level:alvl.value}).select().single();
@@ -1940,13 +1942,13 @@ function adminTab(c){
   const alr=el('div','btnrow');alr.append(alvl,asend);aw.append(atxt,alr);c.append(aw);
   c.append(el('div','sechd','Message moderation'));
   let kind='messages';const list=el('div','mlist');
-  const load=async()=>{list.innerHTML='';list.append(el('p','hint','Loading…'));
+  const load=async()=>{list.innerHTML='';list.append(el('p','hint','Loadingโ€ฆ'));
     const dm=kind==='dms',{data,error}=await sb.from(kind).select(dm?DMSEL:MSG).order('id',{ascending:false}).limit(50);
     list.innerHTML='';if(error){list.append(el('p','hint',error.message));return}
     await loadP((data||[]).flatMap(r=>dm?[r.sender,r.recipient]:[r.user_id]));
     if(!(data||[]).length)list.append(el('p','hint','Nothing here, or the admin SQL has not been run yet.'));
     (data||[]).forEach(r=>{const row=el('div','row'),n=el('div','nm');
-      n.append(el('span','',dm?nameOf(r.sender)+' → '+nameOf(r.recipient):nameOf(r.user_id)),el('small','',r.content.slice(0,120)+' · '+fullTime(r.created_at)));
+      n.append(el('span','',dm?nameOf(r.sender)+' โ’ '+nameOf(r.recipient):nameOf(r.user_id)),el('small','',r.content.slice(0,120)+' ยท '+fullTime(r.created_at)));
       row.append(n,ib('trash','Delete',async()=>{const {data:d,error:e}=await sb.from(kind).delete().eq('id',r.id).select('id');
         if(e)return toast(e.message);if(!d||!d.length)return toast('Not deleted. Run schema_v4.sql first.');
         row.remove();msgs=msgs.filter(x=>x.id!==r.id);if(!$('chat').hidden)renderMsgs('keep');toast('Message deleted')},'danger'));list.append(row)})};
@@ -1980,7 +1982,7 @@ const devIcon=k=>IC[k==='phone'?'phone':k==='tablet'?'tablet':'desktop'];
 function devicesTab(c,h){
   const self={name:L.devName,kind:DEV.kind,os:DEV.os,br:DEV.br,pwa:DEV.standalone,vis:document.visibilityState};
   c.append(el('div','lbl','This device'));
-  const d0=el('div','dev'),di=el('div','di');di.innerHTML=devIcon(self.kind);const dt=el('div','dt');dt.append(el('b','',devLabel(self)),el('small','',self.br+' · '+self.os+(self.pwa?' · Installed app':'')));
+  const d0=el('div','dev'),di=el('div','di');di.innerHTML=devIcon(self.kind);const dt=el('div','dt');dt.append(el('b','',devLabel(self)),el('small','',self.br+' ยท '+self.os+(self.pwa?' ยท Installed app':'')));
   d0.append(di,dt,el('span','badge live','This device'));c.append(d0);
   const nf=field('Device name','e.g. My phone',30);nf.i.value=L.devName||'';c.append(nf.w);
   const nr=el('div','btnrow');nr.append(button('Save name',async()=>{L.devName=nf.i.value.trim();saveL();retrack();toast('Device name saved');h.go('devices')},'sm'));c.append(nr);
@@ -1990,13 +1992,13 @@ function devicesTab(c,h){
   const others=[...map.values()];
   if(!others.length)c.append(el('p','hint','No other devices are open right now.'));
   others.forEach(o=>{const r=el('div','dev'),i=el('div','di');i.innerHTML=devIcon(o.kind);const t=el('div','dt');
-    t.append(el('b','',devLabel(o)),el('small','',(o.br||'Browser')+' · '+(o.os||'Device')+(o.pwa?' · Installed app':'')));
+    t.append(el('b','',devLabel(o)),el('small','',(o.br||'Browser')+' ยท '+(o.os||'Device')+(o.pwa?' ยท Installed app':'')));
     const idle=o.vis==='hidden';r.append(i,t,el('span','badge '+(idle?'idle':'live'),idle?'Idle':'Active now'));c.append(r)});
   c.append(el('div','sechd','Sync'));
   c.append(swRow('Sync appearance across devices','Your theme, liquid glass and chat settings follow your account to every device, live. Turn off to give this device its own look.',L.sync,v=>{L.sync=v;saveL();if(v)pushRemote();h.refresh()}));
   if(L.sync){const sr=el('div','btnrow');
-    sr.append(button('Use this device’s look everywhere',async()=>{const {error}=await sb.from('profiles').update({settings:S}).eq('id',me.id);toast(error?error.message:'Sent to your other devices')},'ghost sm'),
-      button('Use my account’s look here',async()=>{const {data,error}=await sb.from('profiles').select('settings').eq('id',me.id).single();if(error)return toast(error.message);
+    sr.append(button('Use this deviceโ€s look everywhere',async()=>{const {error}=await sb.from('profiles').update({settings:S}).eq('id',me.id);toast(error?error.message:'Sent to your other devices')},'ghost sm'),
+      button('Use my accountโ€s look here',async()=>{const {data,error}=await sb.from('profiles').select('settings').eq('id',me.id).single();if(error)return toast(error.message);
         if(data&&data.settings&&Object.keys(data.settings).length){S={...DEF,...data.settings};lastLocal=0;applyTheme();saveS();if(curCh)renderMsgs('keep');toast('Account look applied');h.refresh()}else toast('Nothing saved to your account yet')},'ghost sm'));c.append(sr)}
   else c.append(el('p','hint','Changes on this device stay here, and changes on other devices will not reach it.'));
   c.append(el('div','sechd','Security'));
@@ -2050,7 +2052,7 @@ function ssRoles(c){
       const ci2=el('input');ci2.type='color';ci2.value=d.color;ci2.disabled=locked;ci2.onchange=()=>{d.color=ci2.value;drawSw()};sw.append(ci2)};drawSw();ed.append(sw);
     if(!r.is_default){ed.append(el('label','lbl','Position (higher outranks lower)'));const pi=el('input','inp');pi.type='number';pi.min=1;pi.max=isOwner(me.id)?99:Math.max(1,rank(me.id)-1);pi.value=d.pos;pi.disabled=locked;pi.oninput=()=>{d.pos=parseInt(pi.value)||1};ed.append(pi)}
     ed.append(el('label','lbl','Permissions'));
-    [['can_manage_channels','Manage channels','Create, rename and delete channels'],['can_manage_messages','Manage messages','Delete other members’ messages'],['can_kick','Remove members','Kick members ranked below them'],['can_manage_roles','Manage roles','Create roles and assign them to lower members']]
+    [['can_manage_channels','Manage channels','Create, rename and delete channels'],['can_manage_messages','Manage messages','Delete other membersโ€ messages'],['can_kick','Remove members','Kick members ranked below them'],['can_manage_roles','Manage roles','Create roles and assign them to lower members']]
       .forEach(([k,l,ds])=>{const row=swRow(l,ds,!!d[k],v=>{d[k]=v});if(locked)row.style.pointerEvents='none',row.style.opacity='.5';ed.append(row)});
     if(!locked){const br=el('div','btnrow');
       br.append(button('Save role',async()=>{const patch={name:d.name.trim()||r.name,color:d.color,pos:r.is_default?0:d.pos,can_manage_channels:d.can_manage_channels,can_manage_messages:d.can_manage_messages,can_kick:d.can_kick,can_manage_roles:d.can_manage_roles};
