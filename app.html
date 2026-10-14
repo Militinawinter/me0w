@@ -865,6 +865,7 @@ function copyImage(url){try{
   }else copy(url,'Link copied');
 }catch(e){copy(url,'Link copied')}}
 const hm=d=>new Date(d).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',hour12:S.h24?false:undefined});
+const sameDay=(a,b)=>a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();
 const fullTime=d=>{const x=new Date(d),n=new Date();return sameDay(x,n)?'Today at '+hm(x):x.toLocaleDateString([],{month:'short',day:'numeric'})+' '+hm(x)};
 
 /* ---- sounds + notifications (this device) ---- */
