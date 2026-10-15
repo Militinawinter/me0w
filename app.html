@@ -120,9 +120,32 @@ select.inp{padding:10px 12px;appearance:auto}
 .rb.add:hover{color:var(--text);box-shadow:inset 0 0 0 1.5px var(--accent-text)}
 .srvicon{display:flex;align-items:flex-start;gap:14px;margin:8px 0 14px}
 .srvicon .btnrow{flex:1;margin:0}
-.joinbox{display:flex;align-items:center;gap:14px;margin:12px 0 6px}
-.joinbox .jbig{width:60px;height:60px;font-size:1.6rem;border-radius:16px}
 .joinbox .jname{font-size:1.1rem}
+.jmodal{max-width:520px}
+.jcard{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--edge);border-radius:18px;overflow:hidden;margin-top:6px}
+.jpane{padding:22px 20px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
+.jserver{background:var(--panel-hi)}
+.jjoin{border-left:1px solid var(--edge);justify-content:center}
+.jicon{width:88px;height:88px;border-radius:26px;display:grid;place-items:center;font-size:2.4rem;color:#fff;font-weight:700;overflow:hidden;flex:none}
+.jicon.mini{width:44px;height:44px;border-radius:14px;font-size:1.3rem}
+.jicon img{width:100%;height:100%;object-fit:cover}
+.inv-rich{display:flex;align-items:center;gap:12px;text-align:left}
+.inv-rich .invt{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.inv-rich .invt b{font-size:.95rem}
+.inv-rich .invt small{color:var(--muted);font-size:.76rem}
+.inv-rich .inva{margin-left:auto;font-size:.78rem;color:var(--muted);text-align:right;flex:none;max-width:40%}
+.jhint{font-size:.66rem;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;font-weight:600}
+.jname{font-size:1.25rem;line-height:1.15}
+.jstat{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted)}
+.jdot{width:9px;height:9px;border-radius:50%;background:#34d399;display:inline-block;flex:none}
+.jown{font-size:.76rem;color:var(--muted)}
+.jwho{display:flex;align-items:center;gap:10px;margin:8px 0 10px;background:var(--panel-hi);border:1px solid var(--edge);border-radius:12px;padding:8px 12px;width:100%}
+.jwho .av{width:44px;height:44px}
+.jwho b{display:block;font-size:.92rem}
+.jwho small{color:var(--muted);font-size:.78rem}
+.jbtns{display:flex;flex-direction:column;gap:8px;width:100%}
+.jbtns .btn{width:100%}
+@media (max-width:480px){.jcard{grid-template-columns:1fr}.jjoin{border-left:0;border-top:1px solid var(--edge)}}
 .rb.sico{width:26px;height:26px;border-radius:8px;font-size:.72rem;box-shadow:none}
 .sep{width:26px;height:1px;background:var(--line);flex:none}
 
@@ -358,7 +381,7 @@ select.inp{padding:10px 12px;appearance:auto}
 @keyframes rxburst{0%{opacity:0;transform:translate(-50%,-40%) scale(.3)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-190%) scale(1.6)}}
 .rxburst{position:fixed;z-index:1200;font-size:2.2rem;line-height:1;pointer-events:none;animation:rxburst .95s var(--ease) forwards}
 .rpick{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;margin-top:10px}.rpick button{font-size:1.5rem;height:44px;border-radius:12px}.rpick button:hover{background:var(--hover)}
-.emo-panel{display:block!important}
+#emo.emo-panel{display:block}
 .emopick{display:flex;flex-direction:column;gap:6px}
 .emsearch{width:100%;border:1px solid var(--edge);background:var(--panel-hi);border-radius:10px;padding:7px 10px;font-size:.86rem;color:var(--text);outline:0}
 .emogrid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-height:min(46vh,300px);overflow-y:auto}
@@ -1038,7 +1061,13 @@ function openSettings(title,tabs,start){
 const pendingJoin=(()=>{try{const c=new URLSearchParams(location.search).get('join');if(c){ls.set('me0w-join',c.slice(0,32));history.replaceState(null,'',location.pathname)}}catch(e){}return ls.get('me0w-join')})();
 const deepGet=(()=>{try{const q=new URLSearchParams(location.search);return{dm:q.get('dm'),server:q.get('server')}}catch(e){return{}}})();
 function setDeep(k,v){try{const base=location.href.split('#')[0].split('?')[0];const q=new URLSearchParams();if(k&&v)q.set(k,v);const s=q.toString();history.replaceState(null,'',base+(s?'?'+s:''))}catch(e){}}
-if(pendingJoin)$('inv').hidden=false;
+if(pendingJoin){const b=$('inv');b.hidden=false;b.innerHTML='';b.classList.add('inv-rich');
+  sb.rpc('server_preview',{code:pendingJoin}).then(({data})=>{const info=Array.isArray(data)?data[0]:data;if(!info)return;
+    b.innerHTML='';const ic=el('div','jicon mini');if(info.icon_url){const im=el('img','full');im.src=info.icon_url;im.alt='';ic.append(im)}else{ic.textContent=ini(info.name);ic.style.backgroundColor='hsl('+hueOf(info.id)+' 62% 52%)'}
+    const tx=el('div','invt');tx.append(el('b','',info.name));
+    const mc=info.member_count!=null?Number(info.member_count):null;
+    tx.append(el('small','',mc!=null?(mc>0?mc+' member'+(mc===1?'':'s'):'Be the first to join'):'You were invited'));
+    b.append(ic,tx,el('span','inva','Sign in or create an account to join.'))}).catch(()=>{})}
 function setMode(m){mode=m;$('tIn').classList.toggle('on',m==='in');$('tUp').classList.toggle('on',m==='up');$('uw').hidden=m!=='up';
   $('asub').textContent=m==='in'?'Sign in':'Create account';$('ap').autocomplete=m==='in'?'current-password':'new-password';$('aerr').textContent=''}
 $('tIn').onclick=()=>setMode('in');$('tUp').onclick=()=>setMode('up');
@@ -2446,21 +2475,31 @@ function serverInviteUrl(s){return location.href.split('#')[0].split('?')[0]+'?j
 function dmUrl(u){return location.href.split('#')[0].split('?')[0]+'?dm='+u}
 async function openJoinDialog(code){
   let info=null;try{const {data}=await sb.rpc('server_preview',{code});info=(Array.isArray(data)?data[0]:data)||null}catch(e){}
-  if(!info){try{const {data}=await sb.from('servers').select('id,name,icon_url,invite_code').eq('invite_code',code).maybeSingle();info=data||null}catch(e){}}
+  if(!info){try{const {data}=await sb.from('servers').select('id,name,icon_url').eq('invite_code',code).maybeSingle();info=data||null}catch(e){}}
   const already=!!(info&&servers.some(s=>s.id===info.id));
+  const mc=info&&info.member_count!=null?Number(info.member_count):null;
+  const uname=(P.get(me.id)||{}).username||'';
   openModal((m,h)=>{
-    m.append(el('h3','',already?'You are already a member':'You have been invited to a server'));
-    const box=el('div','joinbox');
-    const icon=el('div','rb jbig');icon.style.backgroundColor=(info&&info.icon_url)?'transparent':'hsl('+hueOf(info?info.id:code)+' 62% 52%)';
+    m.classList.add('jmodal');
+    const card=el('div','jcard');
+    const sp=el('div','jpane jserver');
+    const icon=el('div','jicon');icon.style.backgroundColor=(info&&info.icon_url)?'transparent':'hsl('+hueOf(info?info.id:code)+' 62% 52%)';
     if(info&&info.icon_url){const im=el('img','full');im.src=info.icon_url;im.alt='';icon.append(im)}else icon.textContent=ini(info?info.name:'?');
-    const tx=el('div');tx.append(el('b','jname',info?info.name:'A private server'),el('div','hint','Invite code: '+code));
-    box.append(icon,tx);m.append(box);
-    m.append(el('p','mp',info&&info.name?'You have been invited to join '+info.name+'.':"Your invite code looks valid. Join to see what's inside."));
-    const row=el('div','mrow2');
-    row.append(button('Not now',()=>{h.close();goHome()},'ghost'));
+    sp.append(icon,el('small','jhint','YOU HAVE BEEN INVITED TO JOIN A SERVER'),el('b','jname',info?info.name:'A private server'));
+    const stat=el('div','jstat');stat.append(el('i','jdot'));
+    stat.append(document.createTextNode(mc!=null?(mc>0?'  '+mc+' member'+(mc===1?'':'s'):'  Be the first to join'):'  Members only'));
+    sp.append(stat);
+    if(info&&info.owner_name)sp.append(el('small','jown','Owned by '+info.owner_name));
+    card.append(sp);
+    const jp=el('div','jpane jjoin');
+    jp.append(el('small','jhint','JOINING AS'));
+    const who=el('div','jwho');who.append(av(me.id));const wt=el('div');wt.append(el('b','',nameOf(me.id)),el('small','','@'+uname));who.append(wt);jp.append(who);
+    const row=el('div','jbtns');
     if(already)row.append(button('Open server',async()=>{h.close();await selectServer(info.id)}));
-    else row.append(button('Join server',async()=>{const {data,error}=await sb.rpc('join_server',{code});if(error){toast(error.message);goHome();return}h.close();await loadServers();if(data)await selectServer(data);toast('Joined server')}));
-    m.append(row)})}
+    else row.append(button('Join server',async()=>{const {data,error}=await sb.rpc('join_server',{code});if(error){toast(error.message);goHome();return}h.close();await loadServers();if(data)await selectServer(data);toast('Joined '+((info&&info.name)||'server'))}));
+    row.append(button('Not now',()=>{h.close();goHome()},'ghost'));
+    jp.append(row);
+    card.append(jp);m.append(card)})}
 async function deleteServerNow(s){
   if(!s)return;
   if(!await confirmBox({title:'Delete '+s.name+'?',text:'This cannot be undone.',ok:'Delete server',danger:true,require:s.name}))return;
