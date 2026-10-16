@@ -8,8 +8,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>me0w</title>
-<link rel="manifest" id="mf"><link rel="apple-touch-icon" id="ati" href="https://i.postimg.cc/2S1GmFgf/image.png">
-<link rel="icon" href="https://i.postimg.cc/2S1GmFgf/image.png">
+<link rel="manifest" id="mf">
+<link rel="icon" type="image/png" href="https://i.postimg.cc/2S1GmFgf/image.png">
+<link rel="icon" type="image/webp" media="(max-width:820px) and (prefers-color-scheme: light)" href="https://i.postimg.cc/7PND3GDv/299-20261014113241.webp">
+<link rel="icon" type="image/webp" media="(max-width:820px) and (prefers-color-scheme: dark)" href="https://i.postimg.cc/WbWvyBdL/299-20261014113301.webp">
+<link rel="apple-touch-icon" id="ati" href="https://i.postimg.cc/7PND3GDv/299-20261014113241.webp">
+<link rel="apple-touch-icon" media="(prefers-color-scheme: dark)" href="https://i.postimg.cc/WbWvyBdL/299-20261014113301.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
@@ -442,8 +446,10 @@ select.inp{padding:10px 12px;appearance:auto}
 }
 @media(max-width:360px){.col{max-width:88%}.ci{padding:10px}}
 
-/* Apple emoji: uses the system font on Apple devices; elsewhere drop AppleColorEmoji.ttf next to index.html */
-@font-face{font-family:'AppleEmoji';src:local('Apple Color Emoji'),local('AppleColorEmoji'),url('AppleColorEmoji.ttf') format('truetype');unicode-range:U+1F000-1FAFF,U+2600-27BF,U+2B00-2BFF,U+FE0F,U+200D}
+/* Apple emoji: uses the installed system font first; otherwise drop AppleColorEmoji-Windows.ttf
+   or AppleColorEmoji.ttf next to index.html.
+   Source: https://github.com/samuelngs/apple-emoji-ttf/releases */
+@font-face{font-family:'AppleEmoji';src:local('Apple Color Emoji'),local('AppleColorEmoji'),url('AppleColorEmoji-Windows.ttf') format('truetype'),url('AppleColorEmoji.ttf') format('truetype');unicode-range:U+200D,U+20E3,U+FE0F,U+00A9,U+00AE,U+203C,U+2049,U+2122,U+2139,U+2194-21AA,U+231A-231B,U+2328,U+23CF,U+23E9-23FA,U+24C2,U+25AA-25FE,U+2600-27BF,U+2934-2935,U+2B00-2BFF,U+3030,U+303D,U+3297,U+3299,U+1F000-1FAFF}
 /* splash */
 #splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:var(--page);transition:opacity .6s,transform .6s var(--ease)}
 #splash.out{opacity:0;transform:scale(1.06);pointer-events:none}
@@ -724,9 +730,12 @@ const show=id=>{['setup','auth','app'].forEach(x=>$(x).hidden=x!==id);if(id!=='a
 let deferredInstall=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;if(window.onInstallReady)window.onInstallReady()});
 addEventListener('appinstalled',()=>{deferredInstall=null});
-(function(){const logo='https://i.postimg.cc/2S1GmFgf/image.png';
+(function(){const PC='https://i.postimg.cc/2S1GmFgf/image.png',LIGHT='https://i.postimg.cc/7PND3GDv/299-20261014113241.webp',DARK='https://i.postimg.cc/WbWvyBdL/299-20261014113301.webp';
+  const phone=matchMedia('(max-width:820px)').matches||/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  const dark=matchMedia('(prefers-color-scheme: dark)').matches||document.documentElement.dataset.theme==='dark';
+  const icon=phone?(dark?DARK:LIGHT):PC,type=phone?'image/webp':'image/png';
   const base=location.href.split('#')[0].split('?')[0];
-  const mf={name:'me0w',short_name:'me0w',start_url:base,scope:base.replace(/[^/]*$/,''),display:'standalone',background_color:'#0b0716',theme_color:'#0b0716',icons:[{src:logo,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+  const mf={name:'me0w',short_name:'me0w',start_url:base,scope:base.replace(/[^/]*$/,''),display:'standalone',background_color:'#0b0716',theme_color:'#0b0716',icons:[{src:icon,sizes:'512x512',type:type,purpose:'any maskable'}]};
   $('mf').href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/manifest+json'}))})();
 let tt;const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2800)};
 const svg=d=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>';
@@ -910,7 +919,7 @@ function applyTheme(){
 applyTheme();
 
 /* ===== Apple-style emoji pictures (Windows/Android/Linux). Apple devices already have them, so this skips there. ===== */
-const EMO_BASE='https://unpkg.com/emoji-datasource-apple@15.0.1/img/apple/64/';
+const EMO_BASE='https://unpkg.com/emoji-datasource-apple@16.0.0/img/apple/64/';
 (function(){
   if(/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(navigator.userAgent)||!window.MutationObserver)return;
   const EMO=/(?:[\u{1F1E6}-\u{1F1FF}]{2}|[#*0-9]\uFE0F?\u20E3|\p{Extended_Pictographic}(?:\uFE0F|[\u{1F3FB}-\u{1F3FF}])?(?:\u200D\p{Extended_Pictographic}(?:\uFE0F|[\u{1F3FB}-\u{1F3FF}])?)*)/gu;
@@ -2089,7 +2098,7 @@ const EMO_CUSTOM={face_with_bags_under_eyes:'https://i.postimg.cc/hjxZx0tJ/image
 const EMO_CORE=[["smile","😄"],["grin","😁"],["joy","😂"],["rofl","🤣"],["wink","😉"],["blush","😊"],["heart_eyes","😍"],["kissing_heart","😘"],["sunglasses","😎"],["star_struck","🤩"],["partying_face","🥳"],["yum","😋"],["thinking","🤔"],["sob","😭"],["cry","😢"],["scream","😱"],["angry","😡"],["rage","😤"],["pray","🙏"],["thumbsup","👍"],["thumbsdown","👎"],["clap","👏"],["raised_hands","🙌"],["muscle","💪"],["ok_hand","👌"],["wave","👋"],["eyes","👀"],["heart","❤️"],["orange_heart","🧡"],["yellow_heart","💛"],["green_heart","💚"],["blue_heart","💙"],["purple_heart","💜"],["black_heart","🖤"],["broken_heart","💔"],["fire","🔥"],["sparkles","✨"],["star","⭐"],["star2","🌟"],["tada","🎉"],["100","💯"],["rocket","🚀"],["boom","💥"],["zap","⚡"],["gift","🎁"],["crown","👑"],["gem","💎"],["coffee","☕"],["pizza","🍕"],["cake","🎂"],["beer","🍺"],["rainbow","🌈"],["crescent_moon","🌙"],["sunny","☀️"],["skull","💀"],["ghost","👻"],["alien","👽"],["robot","🤖"],["poop","💩"],["cat","🐱"],["dog","🐶"],["paw_prints","🐾"],["check","✅"],["x","❌"],["warning","⚠️"],["lock","🔒"],["key","🔑"],["camera","📷"],["musical_note","🎵"],["headphones","🎧"],["money","💰"],["trophy","🏆"],["face_with_bags_under_eyes",""]];
 let EMO_INDEX=null,emoLoad=null;
 function loadEmojiIndex(){if(EMO_INDEX)return Promise.resolve(EMO_INDEX);if(emoLoad)return emoLoad;
-  emoLoad=fetch('https://cdn.jsdelivr.net/npm/emoji-datasource@15.0.1/emoji.json',{cache:'force-cache'}).then(r=>r.ok?r.json():null).then(j=>{
+  emoLoad=fetch('https://cdn.jsdelivr.net/npm/emoji-datasource@16.0.0/emoji.json',{cache:'force-cache'}).then(r=>r.ok?r.json():null).then(j=>{
     if(!Array.isArray(j))throw 0;const a=[];
     for(const e of j){if(!e||!e.unified||e.obsoleted_by)continue;let ch;try{ch=String.fromCodePoint.apply(null,e.unified.split('-').map(h=>parseInt(h,16)))}catch(_){continue}
       const ns=new Set();(e.short_names||[]).forEach(n=>ns.add(n));if(e.short_name)ns.add(e.short_name);
